@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: CloudFormation template with YAML - SecurityGroup depends on vpc-cfn.yml.
+
+Parameters:
+  VPCName:
+    Description: Target VPC Stack Name
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: ^[a-zA-Z][-a-zA-Z0-9]*$
+    Default: debugroom-sample-kubernetes-vpc
+  VPCCiderBlock:
+    Description: CiderBlock paramater for VPC
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    Default: 172.6.0.0/16
+
+Resources:
+  SecurityGroupEC2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: SecurityGroupEC2
+      GroupDescription: SSHAccess
+      VpcId:
+        Fn::ImportValue: !Sub ${VPCName}-VPCID
+      Tags:
+        - Key : Name
+          Value: !Sub ${VPCName}-SecurityGroupEC2
+
+  SecurityGroupIngressEC2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SecurityGroupEC2
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: 118.9.221.247/32
+
+Outputs:
+  SecurityGroupEC2:
+    Description: Security Group for EC2
+    Value: !Ref SecurityGroupEC2
+    Export:
+      Name: !Sub ${VPCName}-SecurityGroupEC2

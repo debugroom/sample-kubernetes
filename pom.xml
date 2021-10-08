@@ -8,5 +8,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>simple-app</module>
+        <module>dbaccess-app</module>
     </modules>
 </project>

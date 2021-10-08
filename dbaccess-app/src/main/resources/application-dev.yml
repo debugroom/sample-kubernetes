@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_URL}/sample_database
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath*:/schema-postgresql.sql
+      data-locations: classpath*:/data-postgresql.sql

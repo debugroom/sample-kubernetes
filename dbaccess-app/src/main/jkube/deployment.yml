@@ -1,0 +1,10 @@
+spec:
+  template:
+    spec:
+      containers:
+        - env: # 環境変数設定
+          - name: DB_URL
+            value: "postgres:5432"
+          - name: SPRING_PROFILES_ACTIVE
+            value: "dev"
+          imagePullPolicy: Always
