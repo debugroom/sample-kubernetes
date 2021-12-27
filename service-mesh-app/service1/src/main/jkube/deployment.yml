@@ -1,0 +1,10 @@
+spec:
+  template:
+    spec:
+      containers:
+        - env: # 環境変数設定
+            - name: SERVICE_SERVICE2_DNS
+              value: "http://service-mesh-app-service2:8080"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+          imagePullPolicy: Always

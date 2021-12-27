@@ -9,5 +9,6 @@
     <modules>
         <module>simple-app</module>
         <module>dbaccess-app</module>
+        <module>service-mesh-app</module>
     </modules>
 </project>
