@@ -19,4 +19,11 @@ public class SampleController {
         return sampleRepository.fineOne();
     }
 
+    @GetMapping("/test")
+    public Sample test(){
+        return Sample.builder()
+                .text("This is created by Service1")
+                .build();
+    }
+
 }

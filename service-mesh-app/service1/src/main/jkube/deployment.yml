@@ -1,3 +1,5 @@
+metadata:
+  namespace: istio-network
 spec:
   template:
     spec:
