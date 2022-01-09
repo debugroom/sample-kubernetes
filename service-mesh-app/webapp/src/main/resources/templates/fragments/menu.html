@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>menu</title>
+</head>
+<body>
+    <div th:fragment="menu" th:remove="tag">
+        <form method="POST" name="logout" th:action="@{/logout}">
+            <ul class="menu" th:each="menu, status: ${menuList}" >
+                <li><a th:href="${menu.path}" th:text="${menu.name}"></a></li>
+            </ul>
+        </form>
+    </div>
+</body>
+</html>

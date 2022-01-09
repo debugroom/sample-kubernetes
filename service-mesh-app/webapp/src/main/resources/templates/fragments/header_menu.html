@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>header</title>
+</head>
+<body>
+<div th:fragment="header" th:remove="tag">
+    <h1>Hello! Spring Security sample!</h1>
+    <form method="POST" name="logout" th:action="@{/logout}">
+    <div th:fragment="menu" class="lined-menu">
+        <ul th:each="menu, status: ${menuList}" >
+            <li><a th:href="${menu.path}" th:text="${menu.name}"></a></li>
+        </ul>
+    </div>
+    </form>
+</div>
+</body>
+</html>

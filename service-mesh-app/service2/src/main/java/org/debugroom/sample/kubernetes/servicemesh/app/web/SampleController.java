@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SampleController {
 
     @GetMapping("/sample")
-    public Sample getSample(){
+    public Sample getSample() {
         return Sample.builder()
                 .text("This is created by Service2.")
                 .build();

@@ -1,4 +1,4 @@
 FROM centos:centos7
 MAINTAINER debugroom
 
-RUN yum -y install bind-utils curl
+RUN yum -y install bind-utils curl iproute

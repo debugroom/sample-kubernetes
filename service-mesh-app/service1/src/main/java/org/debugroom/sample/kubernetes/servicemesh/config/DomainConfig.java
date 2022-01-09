@@ -15,7 +15,7 @@ public class DomainConfig {
     ServiceProperties serviceProperties;
 
     @Bean
-    public WebClient service2WebClient(){
+    public WebClient service2WebClient() {
         return WebClient.builder()
                 .baseUrl(serviceProperties.getService2().dns)
                 .build();

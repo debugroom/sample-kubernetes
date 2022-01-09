@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    th:replace="~{fragments/template_dafault :: layout(~{::head/content()}, ~{::body/content()})}">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/portal.css" media="(min-width: 1280px)">
+    <link rel="stylesheet" type="text/css" href="static/css/portal_mobile.css" media="(min-width: 320px) and (max-width: 767px)">
+    <link rel="stylesheet" type="text/css" href="static/css/portal_tablet.css" media="(min-width: 768px) and (max-width: 1279px)">
+    <title>Portal</title>
+</head>
+<body>
+  <div class="panel">
+      <h2>Successful Login!</h2>
+      <h3>User Information</h3>
+      User Name : <span sec:authentication="name"/>
+      <br/>
+      <h3>ID Token & User claim</h3>
+      ID Token : <span th:text="${oidcUser.getIdToken().getTokenValue()}"></span>
+      <ul>
+          <li th:each="attribute : ${oidcUser.getAttributes()}">
+             <span th:text="${attribute.key}"></span>  :  <span th:text="${attribute.value}"></span>
+          </li>
+      </ul>
+      <br/>
+      <h3>Access Token & Refresh Token</h3>
+      Access Token : <span th:text="${accessToken.getTokenValue()}"></span><br/><br/>
+      Issued At : <span th:text="${accessToken.getIssuedAt()}"></span><br/>
+      Expired At : <span th:text="${accessToken.getExpiresAt()}"></span><br/><br/>
+      Refresh Token : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getTokenValue()}"></span><br/><br/>
+      Issued At : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getIssuedAt()}"></span><br/>
+      Expired At : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getExpiresAt()}"></span><br/>
+      <h3>Call Backend Service</h3>
+      Service1 : <span th:text="${sample1.getText()}"></span> <br>
+      Service2viaService1 : <span th:text="${sample2viaSample1.getText()}"></span> <br>
+      Service2 : <span th:text="${sample2.getText()}"></span>
+  </div>
+</body>
+</html>

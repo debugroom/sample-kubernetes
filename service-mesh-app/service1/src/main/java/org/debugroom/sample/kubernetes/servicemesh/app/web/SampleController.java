@@ -15,12 +15,12 @@ public class SampleController {
     SampleRepository sampleRepository;
 
     @GetMapping("/sample")
-    public Sample getSamples(){
+    public Sample getSamples() {
         return sampleRepository.fineOne();
     }
 
     @GetMapping("/test")
-    public Sample test(){
+    public Sample test() {
         return Sample.builder()
                 .text("This is created by Service1")
                 .build();

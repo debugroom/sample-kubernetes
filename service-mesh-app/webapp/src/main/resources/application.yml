@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: local
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            userNameAttribute: preferred_username
+        registration:
+          keycloak:
+            provider: keycloak
+            scope: openid
+            client-authentication-method: basic
+            authorizationGrantType: authorization_code

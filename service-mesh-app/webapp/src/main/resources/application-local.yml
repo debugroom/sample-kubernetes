@@ -1,0 +1,21 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            authorizationUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/auth
+            tokenUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/token
+            userInfoUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/userinfo
+            jwkSetUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/certs
+            issuer-uri: http://54.65.98.221:7000/auth/realms/master
+        registration:
+          keycloak:
+            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            clientId: webapp-local
+            clientSecret: ZildIBWKgB7HJVJa10KVyK70dMDLglF3
+service:
+  service1:
+    dns: http://localhost:8081
+  service2:
+    dns: http://localhost:8082
