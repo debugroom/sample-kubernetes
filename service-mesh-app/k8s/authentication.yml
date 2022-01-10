@@ -1,0 +1,12 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: ingress-jwt
+  namespace: istio-network
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  jwtRules:
+    - issuer: " http://54.65.98.221:7000/auth/realms/master"
+      jwksUri: "http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/certs"
