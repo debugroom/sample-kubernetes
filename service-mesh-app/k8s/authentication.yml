@@ -6,10 +6,15 @@ metadata:
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway
+      app: service-mesh-app-service1
   jwtRules:
-    - issuer: " http://54.65.98.221:7000/auth/realms/master"
+    - issuer: "http://54.65.98.221:7000/auth/realms/master"
       jwksUri: "http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/certs"
+      fromHeaders:
+        - name: Authorization
+          prefix: "Bearer "
+      forwardOriginalToken: true
+---
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -19,8 +24,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-      istio: igressgateway
-    rules:
-      - from:
-          - source:
-              requestPrincipals: ["*"]
+      app: service-mesh-app-service1
+  action: ALLOW
+  rules:
+    - when:
+        - key: request.auth.claims[iss]
+          values:
+            - "http://54.65.98.221:7000/auth/realms/master"
