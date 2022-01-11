@@ -14,7 +14,7 @@ spring:
           keycloak:
             redirectUri: 'http://54.65.98.221:8090/login/oauth2/code/keycloak'
             clientId: webapp-dev
-            clientSecret: qVWjzoyAcJYpmAgKBbgomi5GlR3kuiRJ
+            clientSecret: NIf9gZyG6WTgwiOYUxgHNN8nab05KMBw
 service:
   service1:
     dns: http://192.168.10.1

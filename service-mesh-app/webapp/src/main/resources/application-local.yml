@@ -13,7 +13,7 @@ spring:
           keycloak:
             redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
             clientId: webapp-local
-            clientSecret: ZildIBWKgB7HJVJa10KVyK70dMDLglF3
+            clientSecret: 5rIv4D3aF7mHwy1ZV7JDGMeltpud3g4c
 service:
   service1:
     dns: http://localhost:8081
