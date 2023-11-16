@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Description: Sample Spring Security VPC template with YAML
+Description: Sample Kubernetes template with YAML
 
 Parameters:
   VPCName:

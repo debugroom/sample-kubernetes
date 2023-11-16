@@ -1,0 +1,24 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: debugroom-sample-eks
+  region: ap-northeast-1
+
+availabilityZones: ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
+
+vpc:
+#  id: debugroom-sample-eks-vpc
+  cidr: 172.8.0.0/16
+
+nodeGroups:
+  - name: debugroom-sample-eks-node-1
+    instanceType: r5.large
+    availabilityZones: ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
+    desiredCapacity: 3
+    minSize: 3
+    maxSize: 10
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        albIngress: true

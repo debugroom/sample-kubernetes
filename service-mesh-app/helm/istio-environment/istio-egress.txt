@@ -1,0 +1,165 @@
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+  labels:
+    helm.sh/chart: istio-egressgateway-1.13.1
+    app: "istio-egressgateway"
+    istio: "egressgateway"
+    app.kubernetes.io/version: "1.13.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: istio-egressgateway
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: istio-egressgateway
+subjects:
+- kind: ServiceAccount
+  name: istio-egressgateway
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+  labels:
+    helm.sh/chart: istio-egressgateway-1.13.1
+    app: "istio-egressgateway"
+    istio: "egressgateway"
+    app.kubernetes.io/version: "1.13.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: istio-egressgateway
+  annotations:
+    {}
+spec:
+  type: LoadBalancer
+  ports:
+    - name: status-port
+      port: 15021
+      protocol: TCP
+      targetPort: 15021
+    - name: http2
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: "istio-egressgateway"
+    istio: "egressgateway"
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+  labels:
+    helm.sh/chart: istio-egressgateway-1.13.1
+    app: "istio-egressgateway"
+    istio: "egressgateway"
+    app.kubernetes.io/version: "1.13.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: istio-egressgateway
+  annotations:
+    {}
+spec:
+  selector:
+    matchLabels:
+      app: "istio-egressgateway"
+      istio: "egressgateway"
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+        prometheus.io/path: /stats/prometheus
+        prometheus.io/port: "15020"
+        prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "true"
+      labels:
+        sidecar.istio.io/inject: "true"
+        app: "istio-egressgateway"
+        istio: "egressgateway"
+    spec:
+      serviceAccountName: istio-egressgateway
+      securityContext:
+      containers:
+        - name: istio-proxy
+          image: auto
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+              add:
+              - NET_BIND_SERVICE
+            runAsUser: 0
+            runAsGroup: 1337
+            runAsNonRoot: false
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: true
+          env:
+          ports:
+          - containerPort: 15090
+            protocol: TCP
+            name: http-envoy-prom
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Source: istio-environment/charts/istio-egressgateway/templates/hpa.yaml
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+  labels:
+    helm.sh/chart: istio-egressgateway-1.13.1
+    app: "istio-egressgateway"
+    istio: "egressgateway"
+    app.kubernetes.io/version: "1.13.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: istio-egressgateway
+  annotations:
+    {}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: istio-egressgateway
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          averageUtilization: 80
+          type: Utilization

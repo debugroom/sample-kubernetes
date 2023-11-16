@@ -3,8 +3,10 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccount: service-mesh-app-service2-serviceaccount
       containers:
         - env: # 環境変数設定
             - name: SPRING_PROFILES_ACTIVE
-              value: "dev"
+              value: "staging"
+              #value: "dev"
           imagePullPolicy: Always

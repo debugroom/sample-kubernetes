@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="service2" />
+        <module name="service1" />
+        <module name="sample-kubernetes-simple-app" />
+        <module name="sample-spring-cloud-kubernetes" />
+        <module name="webapp" />
+        <module name="dbaccess-app" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="demo" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dbaccess-app" options="-parameters" />
+      <module name="demo" options="-parameters" />
+      <module name="sample-kubernetes-simple-app" options="-parameters" />
+      <module name="sample-spring-cloud-kubernetes" options="-parameters" />
+      <module name="service-mesh-app" options="" />
+      <module name="service1" options="-parameters" />
+      <module name="service2" options="-parameters" />
+      <module name="webapp" options="-parameters" />
+    </option>
+  </component>
+</project>

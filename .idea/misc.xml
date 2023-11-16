@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/simple-app/pom.xml" />
+        <option value="$PROJECT_DIR$/dbaccess-app/pom.xml" />
+        <option value="$PROJECT_DIR$/service-mesh-app/pom.xml" />
+        <option value="$PROJECT_DIR$/service-mesh-app/service1/pom.xml" />
+        <option value="$PROJECT_DIR$/service-mesh-app/service2/pom.xml" />
+        <option value="$PROJECT_DIR$/service-mesh-app/webapp/pom.xml" />
+        <option value="$PROJECT_DIR$/sample-spring-cloud-kubernetes/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>

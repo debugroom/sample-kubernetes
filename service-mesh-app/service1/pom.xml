@@ -25,7 +25,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.kubernetes</groupId>
+            <artifactId>client-java</artifactId>
+            <version>13.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.kubernetes</groupId>
+            <artifactId>client-java-extended</artifactId>
+            <version>13.0.2</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -62,8 +71,8 @@
                 <artifactId>kubernetes-maven-plugin</artifactId>
                 <configuration>
                     <helm>
-                        <home>http://54.65.98.221:8000</home>
-                        <sources>http://54.65.98.221:8000</sources>
+                        <home>http://localhost:8000</home>
+                        <sources>http://localhost:8000</sources>
                         <keywords>sample-app</keywords>
                         <maintainers>
                             <maintainer>
@@ -73,14 +82,14 @@
                         </maintainers>
                         <stableRepository>
                             <name>sample-chartmuseum-snapshot-repository</name>
-                            <url>http://54.65.98.221:8000/api/charts</url>
+                            <url>http://localhost:8000/api/charts</url>
                             <username>debugroom</username>
                             <password>debugroom</password>
                             <type>CHARTMUSEUM</type>
                         </stableRepository>
                         <snapshotRepository>
                             <name>sample-chartmuseum-snapshot-repository</name>
-                            <url>http://54.65.98.221:8000/api/charts</url>
+                            <url>http://localhost:8000/api/charts</url>
                             <username>debugroom</username>
                             <password>debugroom</password>
                             <type>CHARTMUSEUM</type>

@@ -1,0 +1,66 @@
+apiVersion: v2
+name: istio-environment
+description: A Helm chart for Kubernetes
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+appVersion: 1.16.0
+
+### Add dependencies implementation
+
+dependencies:
+  - name: istio-init
+    version: 0.1
+    condition: istio-init.enabled
+  - name: base
+    repository: https://istio-release.storage.googleapis.com/charts
+    version: 1.13.1
+    condition: istio-base.enabled
+    tags:
+      - istio-base
+  - name: istiod
+    repository: https://istio-release.storage.googleapis.com/charts
+    version: 1.13.1
+    condition: istiod.enabled
+    tags:
+      - istiod
+  - name: gateway
+    repository: https://istio-release.storage.googleapis.com/charts
+    version: 1.13.1
+    condition: istio-ingressgateway-enabled
+    alias: istio-ingressgateway
+    tags:
+      - istio-ingressgateway
+  - name: gateway
+    repository: https://istio-release.storage.googleapis.com/charts
+    version: 1.13.1
+    condition: istio-egressgateway-enabled
+    alias: istio-egressgateway
+    tags:
+      - istio.egressgateway
+      -
+  - name: istio-routing-setup
+    version: 0.1
+    condition: istio-routing-setup.enabled
+
+  - name: istio-observability-prometheus
+    version: 0.1
+    condition: istio-observability-prometheus.enabled
+
+  - name: istio-observability-kiali
+    version: 0.1
+    condition: istio-observability-kiali.enabled

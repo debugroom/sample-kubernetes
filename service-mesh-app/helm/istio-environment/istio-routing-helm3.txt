@@ -1,0 +1,66 @@
+---
+# Source: istio-environment/charts/istio-routing-setup/templates/gateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: service-mesh-ingressgateway
+  namespace: istio-network
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        httpsRedirect: false
+        mode: SIMPLE
+      hosts:
+        - "*"
+---
+# Source: istio-environment/charts/istio-routing-setup/templates/virtualservice.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: virtual-service1
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - service-mesh-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /service1
+      route:
+        - destination:
+            host: service-mesh-app-service1
+            port:
+              number: 8080
+---
+# Source: istio-environment/charts/istio-routing-setup/templates/virtualservice.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: virtual-service2
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - service-mesh-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /service2
+      route:
+        - destination:
+            host: service-mesh-app-service2
+            port:
+              number: 8080

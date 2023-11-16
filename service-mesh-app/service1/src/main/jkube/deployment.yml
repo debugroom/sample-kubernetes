@@ -3,10 +3,12 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccount: service-mesh-app-service1-serviceaccount
       containers:
         - env: # 環境変数設定
             - name: SERVICE_SERVICE2_DNS
               value: "http://service-mesh-app-service2:8080"
             - name: SPRING_PROFILES_ACTIVE
-              value: "dev"
+              value: "staging"
+              #value: "dev"
           imagePullPolicy: Always

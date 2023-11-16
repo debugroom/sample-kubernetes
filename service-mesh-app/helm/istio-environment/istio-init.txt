@@ -1,0 +1,14 @@
+---
+# Source: istio-environment/charts/istio-init/templates/namespaces.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+---
+# Source: istio-environment/charts/istio-init/templates/namespaces.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-network
+  labels:
+    istio-injection: enabled

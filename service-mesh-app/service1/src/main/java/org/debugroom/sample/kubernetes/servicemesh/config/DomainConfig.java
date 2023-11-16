@@ -10,15 +10,4 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ComponentScan("org.debugroom.sample.kubernetes.servicemesh.domain")
 @Configuration
 public class DomainConfig {
-
-    @Autowired
-    ServiceProperties serviceProperties;
-
-    @Bean
-    public WebClient service2WebClient() {
-        return WebClient.builder()
-                .baseUrl(serviceProperties.getService2().dns)
-                .build();
-    }
-
 }

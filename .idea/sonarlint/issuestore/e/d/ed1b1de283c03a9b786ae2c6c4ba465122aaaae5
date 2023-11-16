@@ -1,0 +1,4 @@
+
+jsquid:S00112"FDefine and throw a dedicated exception instead of using a generic one.(ÉÎë„ıÿÿÿÿ8›üãÙÅ/
+ysquid:S3305"[Inject this field value directly into "entityManagerFactory", the only method that uses it.(²ğ²İ8›üãÙÅ/
+©%squid:RedundantThrowsDeclarationCheck"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(ÉÎë„ıÿÿÿÿ8›üãÙÅ/

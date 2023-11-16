@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/dbaccess-app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sample-spring-cloud-kubernetes" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/service-mesh-app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/service-mesh-app/service1" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/service-mesh-app/service2" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/service-mesh-app/webapp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/simple-app" charset="UTF-8" />
+  </component>
+</project>

@@ -1,5 +1,6 @@
 package org.debugroom.sample.kubernetes.servicemesh.app.web;
 
+import org.debugroom.sample.kubernetes.servicemesh.domain.repository.Service1Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.debugroom.sample.kubernetes.servicemesh.domain.repository.ServiceRepo
 
 @Controller
 public class SampleController {
+
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;

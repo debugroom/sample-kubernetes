@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: service-mesh-app-service1-clusterrolebinding
+  namespace: istio-network
+  labels:
+    app: service-mesh-app-service1
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: service-mesh-app-service1-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: service-mesh-app-service1-serviceaccount
+    namespace: istio-network
