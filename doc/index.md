@@ -1,5 +1,6 @@
 # PoC Micro Service on Kubernetes
 
+![k8s_microservice_sample](image/0_1_k8s_microservice.drawio.png)
 ## 1. [Set up RHEL EC2 instance on AWS](1-set-up-rhel-instance-on-aws.md)
 ## 2. [Set up MicroK8s](2-set-up-microk8s.md)
 ## 3. [Set up Application Environment](3-set-up-app-env.md)
