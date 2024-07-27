@@ -532,15 +532,9 @@ Resources:
 
 ```
 
-なお、EC2のアクセスはSystems Manager Session Managerより実行する。
+なお、以降、EC2のアクセスはSystems Manager Session Managerより実行する。
 
-#### MicroK8sのインストール
-
-- MicroK8sのインストールと実行確認
-
-snapを使用して、microk8sをインストールする。
-See : https://microk8s.io/docs/getting-started
-
+**NOTE:** 必要に応じてRHELのサブスクリプション登録を行っておくこと。
 
 ```bash
 $ subscription-manager register --username xxxxx --password xxxxx --auto-attach
@@ -548,88 +542,4 @@ Registering to: subscription.rhsm.redhat.com:443/subscription
 The system has been registered with ID: yyyyyy
 The registered system name is: ip-zzz-zzz-zzz-zzz.ap-northeast-1.compute.internal
 Ignoring the request to auto-attach. Attaching subscriptions is disabled for organization "xxxxxx" because Simple Content Access (SCA) is enabled.
-```
-
-- Libvirt / NetworkManager のインストールとセットアップ
-
-SSMユーザでNetworkManagerをインストールする。導入済みの場合は実施不要。
-
-```bash
-$ snap version
-snap    2.63-0.el9
-snapd   2.63-0.el9
-series  16
-rhel    9.4
-kernel  5.14.0-427.20.1.el9_4.x86_64
-
-$ sudo snap install microk8s --classic --channel=1.30
-2024-07-24T22:42:18Z INFO Waiting for automatic snapd restart...
-microk8s (1.30/stable) v1.30.1 from Canonical✓ installed
-
-$ export USER=`whoami`
-$ sudo usermod -a -G microk8s $USER
-$ mkdir -p ~/.kube
-$ chmod 0700 ~/.kube
-
-```
-
-一度、Session Managerからログアウトし、再びセッションを開始し、Microk8sの起動ステータスを確認する。
-
-```bash
-$ microk8s status --wait-ready
-2024/07/24 22:53:42.245755 cmd_run.go:442: restoring default SELinux context of /home/ssm-user/snap
-microk8s is running
-high-availability: no
-  datastore master nodes: 127.0.0.1:19001
-  datastore standby nodes: none
-addons:
-  enabled:
-    dns                  # (core) CoreDNS
-    ha-cluster           # (core) Configure high availability on the current node
-    helm                 # (core) Helm - the package manager for Kubernetes
-    helm3                # (core) Helm 3 - the package manager for Kubernetes
-  disabled:
-    cert-manager         # (core) Cloud native certificate management
-    cis-hardening        # (core) Apply CIS K8s hardening
-    community            # (core) The community addons repository
-    dashboard            # (core) The Kubernetes dashboard
-    gpu                  # (core) Alias to nvidia add-on
-    host-access          # (core) Allow Pods connecting to Host services smoothly
-    hostpath-storage     # (core) Storage class; allocates storage from host directory
-    ingress              # (core) Ingress controller for external access
-    kube-ovn             # (core) An advanced network fabric for Kubernetes
-    mayastor             # (core) OpenEBS MayaStor
-    metallb              # (core) Loadbalancer for your Kubernetes cluster
-    metrics-server       # (core) K8s Metrics Server for API access to service metrics
-    minio                # (core) MinIO object storage
-    nvidia               # (core) NVIDIA hardware (GPU and network) support
-    observability        # (core) A lightweight observability stack for logs, traces and metrics
-    prometheus           # (core) Prometheus operator for monitoring and logging
-    rbac                 # (core) Role-Based Access Control for authorisation
-    registry             # (core) Private image registry exposed on localhost:32000
-    rook-ceph            # (core) Distributed Ceph storage using Rook
-    storage              # (core) Alias to hostpath-storage add-on, deprecated
-
-$ microk8s kubectl get all --all-namespaces
-
-    NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
-    kube-system   pod/calico-kube-controllers-796fb75cc-lh9kb   1/1     Running   0          42m
-    kube-system   pod/calico-node-cqfrg                         1/1     Running   0          42m
-    kube-system   pod/coredns-5986966c54-2fm58                  1/1     Running   0          42m
-
-    NAMESPACE     NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
-    default       service/kubernetes   ClusterIP   10.152.183.1    <none>        443/TCP                  42m
-    kube-system   service/kube-dns     ClusterIP   10.152.183.10   <none>        53/UDP,53/TCP,9153/TCP   42m
-
-    NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-    kube-system   daemonset.apps/calico-node   1         1         1       1            1           kubernetes.io/os=linux   42m
-
-    NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-    kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           42m
-    kube-system   deployment.apps/coredns                   1/1     1            1           42m
-
-    NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-    kube-system   replicaset.apps/calico-kube-controllers-796fb75cc   1         1         1       42m
-    kube-system   replicaset.apps/coredns-5986966c54                  1         1         1       42m
-
 ```
