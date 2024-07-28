@@ -185,9 +185,9 @@ SecurityGroupIngressEC2:
 ```
 
 
-Helmレポジトリにbitnamiが提供するKeycloakパッケージを追加する。
+Helmレポジトリに [bitnami](https://github.com/bitnami/charts/tree/main/bitnami/keycloak) が提供するKeycloakパッケージを追加する。
 
-**NOTE:** 通常だと、2024年時点で最新バージョンの24がインストールされるが、コンソールログインでHTTPSが必須となるので、ここでは簡易化のために以前のバージョンを指定して行う。 See: https://github.com/keycloak/keycloak/issues/24821
+**NOTE:** 通常だと、2024年時点で最新バージョンの24がインストールされるが、コンソールログインでHTTPSが必須となるので、ここでは簡易化のために以前のバージョンを指定して行う。 See: https://github.com/keycloak/keycloak/issues/24821 / https://hub.docker.com/r/bitnami/keycloak/tags/?page=2&page_size=&ordering=&name=23
 
 ```bash
 $ microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
