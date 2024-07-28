@@ -156,4 +156,15 @@ $ microk8s kubectl describe deployment postgres
     ----    ------             ----  ----                   -------
     Normal  ScalingReplicaSet  5m4s  deployment-controller  Scaled up replica set postgres-7f8c6b8ddf to 1
 
+$ export postgres_pod_name=`microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres`
+$ microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "select * from information_schema.tables;"
+
+```
+
+**NOTE:** データベース作成後は以下のコマンドでSQLを発行することができる。
+
+```bash
+$ export postgres_pod_name=`microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres`
+$ microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "select * from information_schema.tables;"
+
 ```

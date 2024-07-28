@@ -81,57 +81,86 @@ addons:
 ChartMuseumにPushしたコンテナイメージをデプロイする。
 
 ```bash
+$ microk8s helm3 repo update
 $ microk8s helm3 search repo chartmuseum/ --devel
 NAME                                            CHART VERSION   APP VERSION     DESCRIPTION
 chartmuseum/sample-kubernetes-dbaccess-app      0.0.1-SNAPSHOT                  Demo project for Spring Boot
 
-$ microk8s kubectl create deployment sample-kubernetes-dbaccess-app --image=debugroom/sample-kubernetes-dbaccess-app:latest
-deployment.apps/sample-kubernetes-dbaccess-app created
+$ microk8s helm3 install sample-kuberntes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+NAME: sample-kuberntes-dbaccess-app
+LAST DEPLOYED: Sun Jul 28 08:10:19 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
 
 $ microk8s kubectl describe deployment sample-kubernetes-dbaccess-app
 Name:                   sample-kubernetes-dbaccess-app
 Namespace:              default
-CreationTimestamp:      Sat, 27 Jul 2024 21:06:26 +0000
+CreationTimestamp:      Sun, 28 Jul 2024 08:10:19 +0000
 Labels:                 app=sample-kubernetes-dbaccess-app
+                        app.kubernetes.io/managed-by=Helm
+                        group=org.debugroom
+                        provider=jkube
+                        version=0.0.1-SNAPSHOT
 Annotations:            deployment.kubernetes.io/revision: 1
-Selector:               app=sample-kubernetes-dbaccess-app
+                        jkube.io/git-branch: master
+                        jkube.io/git-commit: fccd204f4db149aaa032a820c6956fe5f5b0562c
+                        jkube.io/git-url: https://github.com/debugroom/sample-kubernetes.git
+                        jkube.io/scm-tag: HEAD
+                        jkube.io/scm-url: https://github.com/spring-projects/spring-boot/sample-kubernetes-dbaccess-app
+                        meta.helm.sh/release-name: sample-kuberntes-dbaccess-app
+                        meta.helm.sh/release-namespace: default
+Selector:               app=sample-kubernetes-dbaccess-app,group=org.debugroom,provider=jkube
 Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
 StrategyType:           RollingUpdate
 MinReadySeconds:        0
 RollingUpdateStrategy:  25% max unavailable, 25% max surge
 Pod Template:
-  Labels:  app=sample-kubernetes-dbaccess-app
+  Labels:       app=sample-kubernetes-dbaccess-app
+                group=org.debugroom
+                provider=jkube
+                version=0.0.1-SNAPSHOT
+  Annotations:  jkube.io/git-branch: master
+                jkube.io/git-commit: fccd204f4db149aaa032a820c6956fe5f5b0562c
+                jkube.io/git-url: https://github.com/debugroom/sample-kubernetes.git
+                jkube.io/scm-tag: HEAD
+                jkube.io/scm-url: https://github.com/spring-projects/spring-boot/sample-kubernetes-dbaccess-app
   Containers:
-   sample-kubernetes-dbaccess-app:
-    Image:         debugroom/sample-kubernetes-dbaccess-app:latest
-    Port:          <none>
-    Host Port:     <none>
-    Environment:   <none>
-    Mounts:        <none>
-  Volumes:         <none>
-  Node-Selectors:  <none>
-  Tolerations:     <none>
+   spring-boot:
+    Image:       debugroom/sample-kubernetes-dbaccess-app:latest
+    Ports:       8080/TCP, 9779/TCP, 8778/TCP
+    Host Ports:  0/TCP, 0/TCP, 0/TCP
+    Environment:
+      DB_URL:                  postgres:5432
+      SPRING_PROFILES_ACTIVE:  dev
+      KUBERNETES_NAMESPACE:     (v1:metadata.namespace)
+      HOSTNAME:                 (v1:metadata.name)
+    Mounts:                    <none>
+  Volumes:                     <none>
+  Node-Selectors:              <none>
+  Tolerations:                 <none>
 Conditions:
   Type           Status  Reason
   ----           ------  ------
   Available      True    MinimumReplicasAvailable
   Progressing    True    NewReplicaSetAvailable
 OldReplicaSets:  <none>
-NewReplicaSet:   sample-kubernetes-dbaccess-app-79c7689b48 (1/1 replicas created)
+NewReplicaSet:   sample-kubernetes-dbaccess-app-6f6dc66cb7 (1/1 replicas created)
 Events:
   Type    Reason             Age   From                   Message
   ----    ------             ----  ----                   -------
-  Normal  ScalingReplicaSet  108s  deployment-controller  Scaled up replica set sample-kubernetes-dbaccess-app-79c7689b48 to 1
+  Normal  ScalingReplicaSet  104s  deployment-controller  Scaled up replica set sample-kubernetes-dbaccess-app-6f6dc66cb7 to 1
 
-$ microk8s kubectl expose deployment sample-kubernetes-dbaccess-app --type=LoadBalancer --port=8080
+$ microk8s kubectl expose deployment sample-kubernetes-dbaccess-app --type=LoadBalancer --port=8080 --name=sample-kubernetes-dbaccess-app-lb
 service/sample-kubernetes-dbaccess-app exposed
 
 $ microk8s kubectl get services
-NAME                             TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-kubernetes                       ClusterIP      10.152.183.1    <none>        443/TCP          2d22h
-postgres                         NodePort       10.152.183.56   <none>        5432:30432/TCP   3h3m
-sample-kubernetes-dbaccess-app   LoadBalancer   10.152.183.18   192.168.1.0   8080:31305/TCP   6m18s
-
+NAME                                TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+kubernetes                          ClusterIP      10.152.183.1     <none>        443/TCP          3d10h
+postgres                            NodePort       10.152.183.56    <none>        5432:30432/TCP   15h
+sample-kubernetes-dbaccess-app      ClusterIP      10.152.183.180   <none>        8080/TCP         66m
+sample-kubernetes-dbaccess-app-lb   LoadBalancer   10.152.183.196   192.168.1.0   8080:31570/TCP   23s
 ```
 
 - アプリケーションへのアクセス確認
