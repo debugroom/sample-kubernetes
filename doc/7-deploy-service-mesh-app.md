@@ -1,8 +1,14 @@
 
-#### アプリケーションのデプロイ
+#### サービスメッシュアプリケーションのデプロイ
 
-- MetalLBの有効化
+**TODO:**
 
+- Istioの有効化
+- ネームスペースの作成
+- サービスメッシュの構築
+- アプリケーションのデプロイ
+
+<!--
 MicroK8sでLoadbalancerであるMetalLBを有効化する。
 
 ```bash
@@ -177,3 +183,5 @@ $ curl http://192.168.1.0:8080/sample-api/users/0
 {"userId":"0","firstName":"taro","familyName":"mynavi","loginId":"taro.mynavi","imageFilePath":"taro.png","credentialResources":[{"userId":0,"credentialType":"PASSWORD","credentialKey":"$2a$11$5knhINqfA8BgXY1Xkvdhvu0kOhdlAeN1H/TlJbTbuUPDdqq.H.zzi","validDate":"2019-01-01T00:00:00.000+00:00"},{"userId":0,"credentialType":"ACCESSTOKEN","credentialKey":"987654321poiuytrewq","validDate":"2016-01-01T00:00:00.000+00:00"}],"admin":true,"login":false}
 
 ```
+
+-->
