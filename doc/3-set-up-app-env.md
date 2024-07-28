@@ -352,3 +352,15 @@ MicroK8sクラスタへのインバウンド接続が許可された開発端末
 **TODO:**
 
 - Apache Kafkaの構築
+
+----
+[index]
+
+1. [Set up RHEL EC2 instance on AWS](1-set-up-rhel-instance-on-aws.md)
+2. [Set up MicroK8s](2-set-up-microk8s.md)
+
+
+4. [Implementation of Application](4-implementation-app.md)
+5. [Deploy Application](5-deploy-app.md)
+6. [Implementation of Service Mesh Application](6-implementation-service-mesh-app.md)
+7. [Deploy Service Mesh Application](7-deploy-service-mesh-app.md)

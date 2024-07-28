@@ -543,3 +543,13 @@ The system has been registered with ID: yyyyyy
 The registered system name is: ip-zzz-zzz-zzz-zzz.ap-northeast-1.compute.internal
 Ignoring the request to auto-attach. Attaching subscriptions is disabled for organization "xxxxxx" because Simple Content Access (SCA) is enabled.
 ```
+
+----
+[index]
+
+2. [Set up MicroK8s](2-set-up-microk8s.md)
+3.[Set up Application Environment](3-set-up-app-env.md)
+4.[Implementation of Application](4-implementation-app.md)
+5.[Deploy Application](5-deploy-app.md)
+6.[Implementation of Service Mesh Application](6-implementation-service-mesh-app.md)
+7.[Deploy Service Mesh Application](7-deploy-service-mesh-app.md)
