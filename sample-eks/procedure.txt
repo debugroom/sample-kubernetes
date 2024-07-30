@@ -1,0 +1,2225 @@
+--------debugroom-sample-kubernetes-vpc---------
+
+IPv4 CIDR
+172.6.0.0/16
+
+cd
+ls
+aws --version
+iptables -L
+sudo iptables -L
+sudo snap install microk8s --classic --channel=1.18/stable
+sudo usermod -a -G microk8s $USER
+echo $USER
+microk8s status --wait-ready
+sudo microk8s status --wait-ready
+
+sudo usermod -G microk8s
+echo $USER
+whoami
+sudo usermod -a -G microk8s ssm-user
+sudo chown -f -R ssm-user ~/.kube
+microk8s status --wait-ready
+su - ssm-user
+su ssm-user
+whoami
+microk8s status --wait-ready
+cat /etc/passwd
+printenv
+export USER=ssm-user
+echo $USER
+microk8s status --wait-ready
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+microk8s status --wait-ready
+groups ssm-user
+exit
+microk8s status --wait-ready
+echo $USER
+export USER=ssm-user
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+microk8s status --wait-ready
+su -
+cat /etc/passwd
+su -
+ls -la
+cd
+ls -la
+vi .bashrc
+ll
+exit
+echo $USER
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+exit
+echo $USER
+microk8s status --wait-ready
+pwd
+cd
+ll
+pwd
+sudo iptables -L
+cd
+microk8s status --wait-ready
+microk8s enable dns storage helm3
+microk8s helm3 version
+microk8s helm3 list
+cd
+ls
+curl https://raw.githubusercontent.com/helm/chartmuseum/main/scripts/get-chartmuseum | bash
+mkdir ~/chartstorage
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" &
+curl https://54.65.98.221:8000
+curl http://54.65.98.221:8000
+ps -ef | grep chart
+kill 29220
+ps -ef | grep chart
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom &
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" &
+ps -ef | grep chart
+curl http://localhost:8000/api/charts
+ps -ef | grep chart
+kill 6928
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get &
+curl http://localhost:8000/api/charts
+ps -ef | grep chart
+kill 13032
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get --allow-overwrite &
+microk8s helm3 list
+microk8s helm3 repo add local http://localhost:8000
+microk8s helm3 repo
+microk8s helm3 repo list
+curl http://localhost:8000/api/charts
+microk8s helm3 repo sample-kubernetes-dbaccess-app
+microk8s helm3 search epo sample-kubernetes-dbaccess-app
+microk8s helm3 search repo sample-kubernetes-dbaccess-app
+microk8s helm3 search repo
+microk8s helm3 repo l
+microk8s helm3 search repo local
+microk8s helm3 search local
+microk8s helm3 search repo sample-app
+microk8s helm3 repo list
+microk8s helm3 search repo chartmuseum/
+microk8s helm3 search repo local/
+microk8s helm3 search repo local
+curl http://localhost:8000/api/charts
+microk8s helm3 repo
+microk8s helm3 repo update http://localhost:8000/api/charts
+microk8s helm3 repo remove local
+microk8s helm3 repo add local http://localhost:8000/api/charts
+microk8s helm3 repo add local http://localhost:8000/
+microk8s helm3 search repo local
+microk8s helm search repo local
+microk8s helm3 search repo local/
+microk8s helm3 search --help
+microk8s helm3 repo remove local
+microk8s helm3 repo add chartmuseum  http://localhost:8000/
+microk8s helm3 search repo chartmuseum/
+microk8s helm3 repo list
+microk8s helm3 search repo chartmuseum/sample-app
+curl http://localhost:8000/api/charts
+curl http://localhost:8000/api/charts/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/
+microk8s helm3 search repo chartmuseum/ --devel
+microk8s helm3 search repo chartmuseum/
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 show readme chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 install sample-app-stack  chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 search repo chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 install sample-app-stack  chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s get pod
+microk8s get pods
+microk8s kubectl get pods
+microk8s helm3 list
+microk8s helm3 uninstall sample-app-stack
+ps -ef | grep hart
+ps -ef | grep chart
+microk8s helm3 search repo chartmuseum/ --devel
+ps -ef
+ps -ef | grep chart
+curl http://localhost:8000/api/charts
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get --allow-overwrite &
+curl http://localhost:8000/api/charts
+microk8s helm3 search repo chartmuseum/ --devel
+cd
+ps -ef | grep chart
+kill 20782
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get --allow-overwrite &
+microk8s helm3 repo update
+microk8s helm3 search repo chartmuseum/ --devel
+ls
+ls -la
+cd ~
+ls
+microk8s helm3 search repo chartmuseum/ --devel
+cd
+microk8s status --wait-ready
+cd
+ls
+cd work
+mkdir work
+ls
+rmdir ~
+cd work/
+ls
+microk8s helm3 --help
+microk8s helm3 create test
+ls
+cd test/
+ls
+vi Chart.yaml
+vi templates/deployment.yaml
+ls
+cd work/
+ls
+mkdir test-pvc
+cd test-pb
+cd test-pvc
+ls
+microk8s kuberctl get pods -A
+microk8s kubectl get pods -A
+ls
+vi postgres-pvc.yml
+microk8s kubectl apply -f postgres-pvc.yml
+microk8s kubectl get pvc -A
+vi postgres.yml
+microk8s kubectl apply -f postgres.yml
+vi postgres.yml
+microk8s kubectl get pod -l infra=postgres
+microk8s kubectl get pod -l
+microk8s kubectl get pod -A
+vi postgres.yml
+microk8s kubectl apply -f postgres.yml
+microk8s kubectl get service -A
+microk8s kubectl get deployment
+vi postgres.yml
+microk8s kubectl apply -f postgres.yml
+vi postgres.yml
+microk8s kubectl apply -f postgres.yml:q
+
+microk8s kubectl get deployment
+microk8s kubectl rs -l
+microk8s kubectl get rs -l
+microk8s kubectl get rs
+microk8s kubectl get pods -o custom-column=:.metadata.name -l infra=postgres
+microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres
+export postgres_pod_name=`microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres`
+microk8s kubectl exec $postgres_pod_name --psql -U postgres -d sample_database -c "desc;"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "desc;"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "d;"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "\d;"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "now();"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "select table_catalog from information_schema.tables;"
+microk8s kubectl exec $postgres_pod_name -- psql -U postgres -d sample_database -c "select * from information_schema.tables;"
+cd
+microk8s kubectl get pods -A
+microk8s kubectl describe pod postgres-589d945b68-c6wsl
+curl -I postgres:5432
+microk8s kubectl exec $postgres_pod_name -- curl -I postgres:5432
+export postgres_pod_name=`microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres`
+echo $postgres_pod_name
+microk8s kubectl exec $postgres_pod_name -- curl -I postgres:5432
+microk8s kubectl exec --helpp
+microk8s kubectl exec --help
+microk8s kubectl exec $postgres_pod_name -- date
+microk8s kubectl exec $postgres_pod_name -- curl postgres:5432
+microk8s kubectl exec $postgres_pod_name -- dig postgres:5432
+microk8s kubectl exec $postgres_pod_name -- date
+microk8s kubectl exec $postgres_pod_name -- dig postgres
+export postgres_pod_name=`microk8s kubectl get pods -o custom-columns=:.metadata.name -l infra=postgres`
+microk8s kubectl exec $postgres_pod_name -it bash
+microk8s kubectl get pods -A
+ls
+cd work/
+ls
+mkdir centos
+cd centos/
+ls
+mkdir centos_pod.yml
+rmdir centos_pod.yml/
+vi centos_pod.yml
+microk8s kubectl create -f centos_pod.yml
+vi centos_pod.yml
+microk8s kubectl create -f centos_pod.yml
+microk8s kubectl get pods -A
+microk8s kubectl exec centos-7bcc69b8c4-r42jk  -it bash
+microk8s kubectl get pods -A
+microk8s kubectl describe pods $postgres_pod_name
+microk8s kubectl exec centos-7bcc69b8c4-r42jk  -it bash
+microk8s kubectl get pods -A
+cd
+ls
+cd work/
+ls
+cd centos/
+ls
+vi centos_pod.yml
+microk8s kubectl get pods -A
+microk8s kubectl exec centos-7bcc69b8c4-r42jk -- bash
+microk8s kubectl exec centos-7bcc69b8c4-r42jk -- -it bash
+microk8s kubectl exec centos-7bcc69b8c4-r42jk -it bash
+microk8s kubectl get pods -A
+microk8s kubectl get deployment
+microk8s kubectl describe pods $postgres_pod_name
+microk8s kubectl exec centos-7bcc69b8c4-r42jk -it bash
+ls
+cd work/
+ls
+cd test-pvc/
+ls
+i postgres-pvc.yml
+vi postgres-pvc.yml
+vi postgres
+vi postgres.yml
+cd
+microk8s kubectl get pod
+microk8s kubectl logs sample-kubernetes-dbaccess-app-7fcd9d95bc-cxtn5
+microk8s service sample-kubernetes-dbaccess-app --url
+
+microk8s kubectl create deployment sample-kubernetes-dbaccess-app --image=debugroom/kubernetes-dbaccess-app:latest
+microk8s kubectl get deployments
+microk8s kubectl get rs
+microk8s kubectl get deployments
+microk8s kubectl get pod
+microk8s kubectl delete deployment sample-kubernetes-dbaccess-app
+microk8s kubectl create deployment sample-kubernetes-dbaccess-app --image=debugroom/sample-kubernetes-dbaccess-app:latest
+microk8s kubectl get deployments
+microk8s kubectl get rs
+microk8s kubectl get deployments
+microk8s kubectl get pod
+microk8s kubectl get deployments
+microk8s kubectl get pod
+microk8s kubectl logs sample-kubernetes-dbaccess-app-7fcd9d95bc-cxtn5
+microk8s kubectl get pod
+microk8s kubectl logs sample-kubernetes-dbaccess-app-7fcd9d95bc-cxtn5
+microk8s kubectl get pod
+microk8s kubectl logs sample-kubernetes-dbaccess-app-7fcd9d95bc-cxtn5
+microk8s kubectl delete deployment sample-kubernetes-dbaccess-app
+docker images
+microk8s kubectl create deployment sample-kubernetes-dbaccess-app --image=debugroom/sample-kubernetes-dbaccess-app:latest
+microk8s kubectl get deployments
+microk8s kubectl get pod
+microk8s kubectl logs sample-kubernetes-dbaccess-app-7fcd9d95bc-hst2w
+microk8s kubectl expose deployment sample-kubernetes-dbaccess-app --type=LoadBalancer --port=8080
+microk8s kubectl get services
+microk8s service sample-kubernetes-dbaccess-app --url
+microk8s kubectl get services
+microk8s kubectl get pod
+microk8s kubectl get services
+microk8s status --wait-ready
+microk8s enable metallb
+microk8s kubectl get services
+http://192.168.10.1:30369/sample-api/samples
+curl http://192.168.10.1:30369/sample-api/samples
+curl http://192.168.10.1:8080/sample-api/samples
+curl http://192.168.10.1:8080/sample-api/samples/1
+curl http://192.168.10.1:8080/sample-api/sample/1
+cd
+microk8s kubectl get pods
+microk8s kubectl get rs
+microk8s kubectl get deployment
+microk8s kubectl get service
+microk8s kubectl delete service sample-kubernetes-dbaccess-app
+microk8s kubectl delete deployment sample-kubernetes-dbaccess-app
+microk8s kubectl get service
+microk8s kubectl get deployment
+exit
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 list
+microk8s helm3 repo --help
+microk8s helm3 repo list
+microk8s helm3 repo search chartmuseum
+microk8s helm3 search chartmuseum
+microk8s helm3 search repo chartmuseum
+microk8s helm3 search repo chartmuseum --devel
+microk8s helm3 install chartmuseum/sample-kubernetes-dbacces-app --devel
+microk8s helm3 install sample-kuberntes-dbaccess-app chartmuseum/sample-kubernetes-dbacces-app --devel
+helm repo update chartmuseum
+microk8s helm3 repo update chartmuseum
+microk8s helm repo update chartmuseum
+microk8s helm3 repo update chartmuseum
+microk8s helm3 search repo chartmuseum --devel
+microk8s helm3 repo update
+microk8s helm3 install sample-kuberntes-dbaccess-app chartmuseum/sample-kubernetes-dbacces-app --devel
+microk8s helm3 install sample-kuberntes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.43:8080/sample-api/samples
+curl http://10.152.183.43:8080/sample-api/sample/1
+microk8s helm3 list
+microk8s helm3 show values sample-kuberntes-dbaccess-app
+microk8s helm3 list
+microk8s helm3 show values sample-kuberntes-dbaccess-app
+microk8s helm3 show values sample-kubernetes-dbaccess-app-1.0.1-SNAPSHOT
+microk8s helm3 show values chartmuseum/sample-kubernetes-dbacces-app
+microk8s helm3 --help
+microk8s helm3 list
+microk8s helm3 uninstall sample-kuberntes-dbaccess-app
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.79:8080/sample-api/sample/1
+cd
+ls
+microk8s kubectl get all
+ls
+cd
+microk8s helm3 repo update chartmuseum
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 repo update chartmuseum
+microk8s helm3 repo update
+microk8s helm3 list
+microk8s helm3 repo update chartmuseum
+microk8s helm3 repo update
+microk8s helm3 --help
+microk8s helm3 list
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app
+microk8s helm3 status sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 status sample-kubernetes-dbaccess-app
+microk8s helm3 show values sample-kubernetes-dbaccess-app
+microk8s helm3 show values sample-kubernetes-dbaccess-app --devel
+microk8s helm3 show values sample-kubernetes-dbaccess-app -devel
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s helm3 list
+microk8s kubectl get all
+microk8s history sample-kubernetes-dbaccess-app
+microk8s helm3 history sample-kubernetes-dbaccess-app
+microk8s kubectl get all
+curl http://10.152.183.79:8080/sample-api/users
+curl http://10.152.183.79:8080/sample-api/samples
+microk8s helm3 --help
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s kubectl get all
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.237:8080/sample-api/samples
+curl http://10.152.183.237:8080/sample-api/users
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 history sample-kubernetes-dbaccess-app
+curl http://10.152.183.237:8080/sample-api/samples
+curl http://10.152.183.237:8080/sample-api/users
+ls
+cd work/
+ls
+microk8s kubectl get all
+microk8s logs pod/sample-kubernetes-dbaccess-app-c68ff6456-9s62j
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-c68ff6456-9s62j
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s helm3 history sample-kubernetes-dbaccess-app
+curl http://10.152.183.237:8080/sample-api/samples
+curl http://10.152.183.237:8080/sample-api/users
+docker images
+microk8s docker images
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.200:8080/sample-api/samples
+curl http://10.152.183.200:8080/sample-api/users
+curl http://10.152.183.200:8080/sample-api/users/1
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 --help
+microk8s helm3 pull sample-kubernetes-dbaccess-app
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app
+microk8s helm3 pull sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app --devel
+ls
+tar xvf sample-kubernetes-dbaccess-app-1.0.1-SNAPSHOT.tgz
+vi sample-kubernetes-dbaccess-app/templates/sample-kubernetes-dbaccess-app-deployment.yaml
+rm -rf sample-kubernetes-dbaccess-app
+ls
+rm sample-kubernetes-dbaccess-app-1.0.1-SNAPSHOT.tgz
+ls
+curl http://10.152.183.200:8080/sample-api/users
+exit
+cd
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+ps -ef | grep chartmuseum
+kill 3351
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+ps -ef | grep chartmuseum
+kill 1218
+ps -ef | grep chartmuseum
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app --devel
+ls
+tar xvf sample-kubernetes-dbaccess-app-1.0.1-SNAPSHOT.tgz
+vi sample-kubernetes-dbaccess-app/templates/sample-kubernetes-dbaccess-app-deployment.yaml
+curl -X DELETE localhost:8000/api/charts/sample-kubernetes-dbaccess-app/1.0.1-SNAPSHOT
+curl -X DELETE localhost:8000/api/charts/sample-kubernetes-dbaccess-app/1.0.1-SNAPSHOT -u debugroom:debugroom
+cd
+ls
+rm -r sample-kubernetes-dbaccess-app*
+ls
+cd work/
+ls
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 repo update
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app --devel
+ls
+tar xvf sample-kubernetes-dbaccess-app-0.0.1-SNAPSHOT.tgz
+vi sample-kubernetes-dbaccess-app/templates/sample-kubernetes-dbaccess-app-deployment.yaml
+microk8s kubectl get all
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.26:8080/sample-api/users
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-68954bb4bd-dvr5h
+vi sample-kubernetes-dbaccess-app/templates/sample-kubernetes-dbaccess-app-deployment.yaml
+microk8s helm3 repo update
+ls
+rm -rf sample-kubernetes-dbaccess-app*
+ls
+microk8s helm3 pull chartmuseum/sample-kubernetes-dbaccess-app --devel
+tar xvf sample-kubernetes-dbaccess-app-0.0.1-SNAPSHOT.tgz
+vi sample-kubernetes-dbaccess-app/templates/sample-kubernetes-dbaccess-app-deployment.yaml
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-7qfzt
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-68mgk
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+cd
+ps -ef | grep chart
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-ggzgg
+microk8s kubectl get all
+curl http://10.152.183.213:8080/sample-api/users
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-ggzgg
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+microk8s helm3 history sample-kubernetes-dbaccess-app
+curl http://10.152.183.213:8080/sample-api/users
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-ggzgg
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.99:8080/sample-api/users
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-tkjd2
+microk8s kubectl get all
+microk8s kubectl logs pod/sample-kubernetes-dbaccess-app-ff6d69bd7-tkjd2
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s helm3 repo update
+microk8s helm3 upgrade sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s helm3 install sample-kubernetes-dbaccess-app chartmuseum/sample-kubernetes-dbaccess-app --devel
+microk8s kubectl get all
+curl http://10.152.183.99:8080/sample-api/users
+curl http://10.152.183.28:8080/sample-api/users
+cd
+microk8s kubectl get all
+microk8s kubectl exec pod/postgres-589d945b68-c6wsl -- psql -U postgres -d sample_database -c "select * from usr;"
+ls
+cd
+ls
+ls -la
+mkdir .ssh
+ls
+cd .ssh
+ls
+touch test.pem
+vi test.pem
+ls
+chmod 644
+chmod 644 test.pem
+ls
+ssh -i test.pem ec2-user@18.181.151.198
+chmod  test.pem
+ssh -i test.pem ec2-user@18.181.151.198
+chmod 600 test.pem
+ssh -i test.pem ec2-user@18.181.151.198
+vi test.pem
+ssh -i test.pem ec2-user@18.181.151.198
+ls -la
+ssh -i test.pem ec2-user@18.181.151.198
+cd
+ssh -i ~/.ssh/test.pem ec2-user@18.181.151.198
+cd
+ls
+ssh -i ~/.ssh/test.pem ec2-user@18.181.151.198
+cd
+ssh -i ~/.ssh/test.pem ec2-user@18.181.151.198
+cd
+history
+cd
+ls
+microk8s kubectl get all
+curl http://10.152.183.28:8080/sample-api/users
+ps -ef | grep chartmuseum
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 show values chartmuseum/sample-kubernetes-dbacces-app
+history
+microk8s status --wait-ready
+cd
+ps -ef | grep chartmuseum
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 search repo chartmuseum --devel
+microk8s helm3 repo update
+microk8s helm3 search repo chartmuseum --devel
+microk8s helm3 repo update
+microk8s helm3 search repo chartmuseum --devel
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d-mrcrt
+microk8s kubectl get all
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d-mrcrt
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s kubectl get all
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all
+curl http://service-mesh-app-service2:8080/sample
+curl http://10.152.183.88:8080/sample
+curl http://10.152.183.28:8080/sample-api/users
+curl http://10.152.183.88:8080/service2/sample
+microk8s kubectl get all
+microk8s kubectl logs service-mesh-app-service2-66bddd487b-ggq4p
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 upgrade service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s helm3 repo update
+microk8s helm3 upgrade service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all
+microk8s kubectl logs service-mesh-app-service2-66bddd487b-qpw28
+microk8s kubectl get all
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all
+curl http://10.152.183.135:8080/service2/sample
+curl http://service-mesh-app-service2:8080/service2/sample
+curl http://10.152.183.38:8080/service1/sample
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d-tnpvk
+microk8s helm3 upgrade service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+curl http://10.152.183.38:8080/service1/sample
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s kubectl get all
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+curl http://10.152.183.50:8080/service1/sample
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d-qr4hq
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s kubectl logs service-mesh-app-service1-f9dfff89d-qr4hq
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+curl http://10.152.183.50:8080/service1/sample
+microk8s kubectl logs service-mesh-app-service1-7864788cfb-4w4hb
+microk8s kubectl get all
+microk8s kubectl exec -it service-mesh-app-service1-7864788cfb-4w4hb  -- /bin/sh
+cd
+microk8s kubectl get service service-mesh-app-service1
+microk8s kubectl describe service service-mesh-app-service1
+cd
+ls
+microk8s kubectl get
+microk8s kubectl get all
+microk8s kubectl exec it service-mesh-app-service1-7864788cfb-4w4hb --env
+microk8s kubectl exec -it service-mesh-app-service1-7864788cfb-4w4hb --env
+microk8s kubectl exec -it service-mesh-app-service1-7864788cfb-4w4hb -- env
+microk8s kubectl exec -it service-mesh-app-service1-7864788cfb-4w4hb -- cat /etc/resolv.conf
+microk8s kubectl get all
+microk8s kubectl exec -it service-mesh-app-service1-7864788cfb-4w4hb -- cat /etc/resolv.conf
+docker images
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --command --dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl get all
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i dig --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s delete dig
+microk8s kubectl delete dig
+microk8s kubectl delete pod dig
+microk8s kubectl get all
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl delete pod dig
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl get all
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-service2:8080
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service2:8080
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service2:8080/service2/sample
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+microk8s helm3 repo update
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s kubectl get all
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service1:8080/service1/sample
+curl http://10.152.183.50:8080/service1/sample
+microk8s kubectl get all
+curl http://10.152.183.157:8080/service1/sample
+curl http://service-mesh-app-service1:8080/service1/sample
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service1:8080/service1/sample
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig serivce-mesh-app-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.default.svc.cluster.local
+cd
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service1:8080/service1/sample
+cd
+ls
+history | grep kubectl
+ls
+cd work/
+ls
+cd centos/
+ls
+vi centos_pod.yml
+cd ..
+ls
+cd sample-kubernetes-dbaccess-app/
+ls
+vi Chart.yaml
+vi values.yaml
+cd ..
+ls
+rm -r sample-kubernetes-dbaccess-app*
+ls
+cd test
+ls
+vi Chart.yaml
+vi values.yaml
+cd ..
+ls
+rm -r test
+ls
+cd test-pvc/
+ls
+cd ..
+ls
+cd
+ls
+mkdir repo
+cd repo/
+ls
+git clone https://github.com/debugroom/sample-kubernetes.git
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+ls
+cd
+ls
+history | grep status
+microk8s status --wait-ready
+microk8s.enable istio
+microk8s kubectl get all --all-namespces
+microk8s kubectl get all --all-namespaces
+microk8s istioctl version
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd service1/
+ls
+cd src/
+ls
+cd main/
+ls
+cd jkube/
+ls
+vi deployment.yml
+microk8s istioctl kube-inject -f deployment.yml
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+mkdir istio
+cd istio/
+ls
+git clone https://github.com/istio/istio.git
+cd istio/
+ls
+cd samples/
+ls
+cd bookinfo/platform/kube/
+ls
+microk8s istioctl kube-inject -f bookinfo.yaml
+microk8s kubectl get all --all-namespaces
+cd
+microk8s kubectl get namespaces -L
+microk8s kubectl get namespaces -L istio-injection
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+c k8s/
+cd k8s/
+ls
+vi namespace.yml
+microk8s kubectl apply -f namespace.yml
+microk8s kubectl get namespaces -L istio-injection
+ps -ef
+top
+cd
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service1:8080/service1/sample
+chartmuseum --debug --port=8000 --storage="local" --storage-local-rootdir="~/chartstorage" --basic-auth-user=debugroom --basic-auth-pass=debugroom --auth-anonymous-get  --allow-overwrite &
+ps -ef | grep chart
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 update
+history | grep helm
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all
+microk8s kubectl get all --all-namespaces
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all --all-namespaces
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs pod/testpod
+microk8s kubectl logs testpod
+microk8s kubectl logs testpod2
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs testpod
+microk8s kubectl delete testpod
+microk8s kubectl delete pod testpod
+microk8s kubectl get all --all-namespaces
+cd
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+git fetch origin master
+git merge FETCH_HEAD
+vi service-mesh-app/k8s/gateway.yml
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl apply -f service-mesh-app/k8s/gateway.yml
+microk8s kubectl apply -f service-mesh-app/k8s/virtualservice.yml
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get getway -n istio-network
+microk8s kubectl get gateway -n istio-network
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get all -n istio-network
+curl http://192.168.10.1:8080/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://service-mesh-app-service1:8080/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://192.168.10.1:8080/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://10.152.183.133:8080/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod2 --command -- curl -s http://10.152.183.133:8080/service1/test
+microk8s kubectl describe gateway -n istio-network
+microk8s kubectl describe virtualservice -n istio-network
+microk8s kubectl describe virtualservice -n default
+microk8s kubectl delete virtualservice service-mesh
+vi service-mesh-app/k8s/virtualservice.yml
+microk8s kubectl apply -f service-mesh-app/k8s/virtualservice.yml
+microk8s kubectl describe virtualservice -n istio-network
+curl http://192.168.10.1:8080/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl -s http://192.168.10.1:8080/service1/test
+microk8s kubectl describe gateway -n istio-network
+microk8s kubectl delete virtualservice service-mesh
+microk8s kubectl delete virtualservice service-mesh -n istio-network
+microk8s kubectl delete gateway service-mesh-gateway -n istio-network
+vi service-mesh-app/k8s/gateway.yml
+microk8s kubectl apply -f service-mesh-app/k8s/gateway.yml
+microk8s kubectl apply -f service-mesh-app/k8s/virtualservice.yml
+curl http://192.168.10.1/service1/test
+curl http://192.168.10.1/service1/sample
+cd
+curl http://192.168.10.1/service1/sample
+microk8s kubectl delete virtualservice service-mesh -n istio-network
+microk8s kubectl delete gateway service-mesh-gateway -n istio-network
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+ls
+vi gateway.yml
+vi virtualservice.yml
+microk8s kubectl apply -f service-mesh-app/k8s/virtualservice.yml
+microk8s kubectl apply -f virtualservice.yml
+microk8s kubectl apply -f gateway.yml
+curl http://192.168.10.1/service1/sample
+curl http://192.168.10.1/service1/test
+curl http://debugroom.org/service1/test
+microk8s kubectl delete virtualservice service-mesh -n istio-network
+microk8s kubectl delete gateway service-mesh-gateway -n istio-network
+vi virtualservice.yml
+vi gateway.yml
+microk8s kubectl apply -f gateway.yml
+microk8s kubectl apply -f virtualservice.yml
+curl http://service-mesh-app-service1.istio-network.svc.cluster.local/service1/test
+microk8s kubectl delete virtualservice service-mesh -n istio-network
+microk8s kubectl delete gateway service-mesh-gateway -n istio-network
+vi virtualservice.yml
+microk8s get svc -n istio-system
+microk8s kubectl get svc -n istio-system
+cd
+history | grep env
+history | grep testpod
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- env
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.istio-network.svc.clouster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig serivce-mesh-service1.default.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig serivce-mesh-service1.istio-network.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-service1.istio-network.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.istio-network.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- env
+echo "INGRESS_HOST=$INGRESS_HOST, INGRESS_PORT=$INGRESS_PORT"
+microk8s kubectl run -n istio-network --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- env
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- env
+microk8s kubectl run --help
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.istio-network.svc.cluster.local
+microk8s kubectl run -n istio-network --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- env
+microk8s kubectl get all --all-namespaces
+microk8s kubectl delete pod -n istio-network testpod
+microk8s kubectl get all --all-namespaces
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command --
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.istio-network.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig istio-ingressgateway.istio-system.svc.cluster.local
+cd
+microk8s kubectl get all --all-namespaces
+cd
+cat /etc/resolv.conf
+exit
+cd
+microk8s kubectl get all --all-namespaces
+microk8s kubectl -n istio-system port-forward service/grafana 3000
+microk8s kubectl -n istio-system port-forward service/kiali 20001
+microk8s kubectl -n istio-system port-forward service/kiali 20001 --address 0.0.0.0 &
+microk8s kubectl -n istio-system port-forward service/grafana 3000 --address 0.0.0.0 &
+cd
+microk8s.helm3 repo add codecentric https://codecentric.github.io/helm-charts
+microk8s.helm3 repo update
+microk8s.helm3 install keycloak codecentric/keycloak
+microk8s helm3 repo delete codecentric
+microk8s helm3 repo remove codecentric
+microk8s.helm3 repo update
+microk8s kubectl get all --all-namespaces
+microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
+microk8s helm3 install keycloak bitnami/keycloak
+microk8s helm3 install my-release bitnami/keycloak
+microk8s helm3 repo remove bitnami
+sudo snap install helm --classic
+microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
+microk8s helm3 install keycloak bitnami/keycloak
+sudo ln -s /snap/bin/helm /var/snap/microk8s/current/bin/helm3
+sudo ln -s /snap/bin/helm /var/snap/microk8s/current/bin/helm
+microk8s helm3 version
+microk8s helm version
+sudo snap install helm3 --classic
+sudo ln -s /snap/bin/helm3 /var/snap/microk8s/current/bin/helm3
+sudo ln -s /snap/bin/helm3 /var/snap/microk8s/current/bin/
+microk8s helm3 version
+ls -la /var/snap/microk8s/current/bin/
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+curl http://192.168.10.2/auth
+curl http://192.168.10.2
+microk8s kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+ps -ef | grep keycloak
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+ps -ef | grep keycloak
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+microk8s kubectl -n istio-system port-forward service/kiali 20001 --address 0.0.0.0 &
+cd
+microk8s kubectl get all --all-namespaces
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig service-mesh-app-service1.istio-network.svc.cluster.local
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig keycloak.default.svc.cluster.local
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+history | grep helm
+cd
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get all -n istio-network
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0 &
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+ps -ef | grep service/
+kill
+exit
+cd
+ps -ef | grep service
+ps -ef | grep port-forward
+kill 21640
+kill 21660
+kill 21672
+ps -ef | grep port-forward
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0 &
+ps -ef | grep port-forward
+cd
+ls
+microk8s helm3 repo update
+curl http://192.168.10.1/service1/test
+curl http://192.168.10.1:8080/service1/test
+curl http://192.168.10.1/service1/test
+vi virtualservice.yml
+ls
+cd repo/sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+ls
+vi virtualservice.yml
+vi gateway.yml
+microk8s kubectl apply -f gateway.yml
+microk8s kubectl apply -f virtualservice.yml
+microk8s kubectl get all --all-namespaces
+curl http://192.168.10.1/service1/test
+curl http://192.168.10.1/service2/sample
+history | grep helm
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+curl http://10.152.183.48:8080/portal
+curl http://10.152.183.13:8080/service1/test
+curl http://10.152.183.48:8080/portal
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs pod/service-mesh-webapp-559bf84ff8-wlcg6
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+curl http://10.152.183.52:8080/portal
+cd
+microk8s kubectl get all --all-namespaces
+cd
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0 &
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- dig 54.68.98.221
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.68.98.221:7000/auth
+ps -ef | grep port-forward
+kill 11265
+kill 11308
+kill 11316
+ps -ef | grep port-forward
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+microk8s kubectl get all --all-namespaces
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- cat /etc/resolve.conf
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- cat /etc/resolv.conf
+cd
+sudo iptables -L
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.68.98.221:7000/auth
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://www.google.com
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.68.98.221:7000/auth -L
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- ipconfig -a
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- ifconfig -a
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- ip a
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- netstat
+cd
+ls
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- ip a
+microk8s kubectl get all --all-namespaces
+ip a
+microk8s kubectl get all --all-namespaces
+microk8s kubectl describe service keycloak-postgres
+cd
+microk8s kubectl port-forward service/keycloak 80:80 --address 0.0.0.0
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.68.98.221:7000/auth -L
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.68.98.221:7000/auth -L
+ps -ef | grep keycloak
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://54.65.98.221:7000/auth -L
+ps -ef | grep service-mesh
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+cd
+curl -L curl http://54.68.98.221:7000/auth -L
+curl http://54.68.98.221:7000/auth -L
+curl http://54.65.98.221:7000/auth -L
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 repo update
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl -n istio-system port-forward service/kiali 20001 --address 0.0.0.0 &
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+cd
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+git fetch origin master
+git merge FETCH_HEAD
+ls
+cd service-mesh-app/
+ls
+cdk
+cd k8s/
+ls
+microk8s kubectl get all --all-namespaces
+curl http://192.168.10.1/service1/test
+curl http://192.168.10.1/service1/sample
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+git fetch origin master
+git merge FETCH_HEAD
+cd service-mesh-app/
+cd k8s/
+ls
+vi authentication.yml
+history | grep apply
+microk8s kubectl apply -f authentication.yml
+microk8s kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode
+cd
+microk8s kubectl get all --all-namespaces
+microk8s helm3 uninstall service-mesh-webapp
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 uninstall sample-kubernetes-dbaccess-app
+microk8s kubectl delete service postgres
+microk8s kubectl get all --all-namespaces
+microk8s kubectl delete pod centos-7bcc69b8c4-r42jk
+microk8s kubectl get all --all-namespaces
+microk8s helm3 uninstall keycloak
+microk8s kubectl get all --all-namespaces
+microk8s disable istio
+microk8s kubectl get all --all-namespaces
+microk8s disable metallb
+microk8s stop
+sudo snap refresh microk8s --classic --channel=latest/edge
+microk8s start
+microk8s status --wait-ready
+microk8s enable metallb
+microk8s enable istio
+microk8s status --wait-ready
+microk8s kubectl get all --all-namespaces
+microk8s helm3 install keycloak
+microk8s helm install keycloak
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl get all --all-namespaces
+microk8s helm uninstall keycloak
+microk8s helm3 install keycloak bitnami/keycloak
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s logs pod/kiycloak-0
+microk8s kubectl logs pod/kiycloak-0
+microk8s kubectl logs pod/keycloak-0
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl port-forward service/keycloak 7000:8080 --address 0.0.0.0
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs pod/keycloak-0
+microk8s kubectl get all --all-namespaces
+helm delete keycloak
+microk8s helm delete keycloak
+microk8s kubectl get all --all-namespaces
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs pod/keycloak-0
+microk8s kubectl get all --all-namespaces
+microk8s helm delete keycloak
+microk8s helm repo add codecentric https://codecentric.github.io/helm-charts
+microk8s helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --values ./values.yaml
+microk8s helm upgrade --install keycloak codecentric/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs pod/keycloak-0
+microk8s kubectl get all --all-namespaces
+microk8s helm delete keycloak
+microk8s kubectl get all --all-namespaces
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get event pod/keycloak-0
+microk8s kubectl get event --all-namespaces -o wide
+microk8s kubectl get all --all-namespaces
+microk8s status --wait-
+microk8s kubectl get all --all-namespaces
+microk8s helm delete keycloak
+microk8s status --wait-ready
+microk8s disable istio
+microk8s status --wait-ready
+microk8s disable storage
+microk8s enable storage
+microk8s enable istio
+microk8s status --wait-ready
+microk8s kubectl get all --all-namespaces
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get event pod/keycloak-postgresql-0
+microk8s kubectl logs pod/keycloak-postgresql-0
+microk8s kubectl get all --all-namespaces
+microk8s helm delete keycloak
+microk8s kubectl get all --all-namespaces
+microk8s stop
+microk8s start
+microk8s kubectl get all --all-namespaces
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s helm delete keycloak
+microk8s kubectl get all --all-namespaces
+microk8s logs -f pod/hostpath-provisioner-74c6d47c9-7bcr6 -n kube-system
+microk8s kubectl logs -f pod/hostpath-provisioner-74c6d47c9-7bcr6 -n kube-system
+microk8s kubectl get all --all-namespaces
+ls /var/snap/microk8s/common/default-storage
+ls /var/snap/microk8s/common/
+ls -l /var/snap/microk8s/common/
+ls -l /var/snap/microk8s/common/default-storage/
+chomod 777 -R /var/snap/microk8s/common/default-storage/default-data-keycloak-postgresql-0-pvc-e825f756-5ab5-4e73-9a88-fd1b17967d00/
+chmod 777 -R /var/snap/microk8s/common/default-storage/default-data-keycloak-postgresql-0-pvc-e825f756-5ab5-4e73-9a88-fd1b17967d00/
+sudo chmod 777 -R /var/snap/microk8s/common/default-storage/default-data-keycloak-postgresql-0-pvc-e825f756-5ab5-4e73-9a88-fd1b17967d00/
+ls -l /var/snap/microk8s/common/default-storage/
+microk8s helm install keycloak bitnami/keycloak
+microk8s kubectl get all --all-namespaces
+microk8s kubectl logs -f pod/keycloak-0
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+cd
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s kubectl get all --all-namespaces
+microk8s helm3 update
+microk8s helm3 repo update
+microk8s helm3 repo delete codecentric
+microk8s helm3 repo remove codecentric
+microk8s helm3 install service-mesh-webapp chartmuseum/service-mesh-webapp --devel
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl logs pod/service-mesh-webapp-747d748664-rmksh
+curl http://192.168.10.1/service1/test
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://192.168.10.1/service1/test
+microk8s kubectl apply -f gateway.yml
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+microk8s kubectl apply -f gateway.yml
+microk8s kubectl apply -f virtualservice.yml
+microk8s kubectl get all --all-namespaces
+microk8s kubectl run --image=debugroom/test-client:latest --restart=Never --rm -i testpod --command -- curl http://192.168.10.1/service1/test
+curl http://192.168.10.1/service1/test
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl apply -f authentication.yml
+microk8s kubectl get all --all-namespaces
+curl http://192.168.10.1/service1/test
+microk8s helm3 uninstall service-mesh-app-service2
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl get all --all-namespaces
+curl http://192.168.10.1/service1/test
+git fetch origin master
+git merge FETCH_HEAD
+microk8s kubectl apply -f authentication.yml
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl http://192.168.10.1/service1/test
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+curl http://192.168.10.1/service1/test
+curl http://192.168.10.1/service2/sample
+curl http://192.168.10.1/service1/test
+vi authentication.yml
+curl http://192.168.10.1/service1/test
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+curl http://192.168.10.1/service1/test
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+curl http://192.168.10.1/service1/test
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+curl http://192.168.10.1/service1/test
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+curl http://192.168.10.1/service1/test
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl logs pod/service-mesh-webapp-747d748664-rmksh
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+microk8s helm3 uninstall service-mesh-app-service1
+microk8s helm3 install service-mesh-app-service1 chartmuseum/service-mesh-app-service1 --devel
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl logs pod/service-mesh-webapp-747d748664-rmksh
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl http://192.168.10.1/service1/test
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl http://192.168.10.1/service1/test
+curl -sSH "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTQ3MzksImlhdCI6MTY0MTg5NDY3OSwiYXV0aF90aW1lIjoxNjQxODk0MTc3LCJqdGkiOiJhYTVhYTAyYS1lODc2LTRiN2UtYjA3Ny00MmVlNWIxNzEyNGQiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6Ilk0eC1DRndvakVndGhQSGEtckswQ0ZPY3JHb2NQN0hmTW12SE5lUDJ2ZHciLCJzZXNzaW9uX3N0YXRlIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiYWNyIjoiMCIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.dmjkosPxzq-NA38093K-GWbKlpqOYHd8d7DeyFhp6blsnmhoNA3ETqWYJn6htSEiE6dAyLl4atdzpVKlUBeQanv7Bm8YMxcfYzs3hciIyHNChgiCOAUGkB_t-punTlddBprJOp-5gRTFm6THDUIkwlvFzCObbMBgNMa9VVvaQXMxOM6bzb9ZiWEKGYDHJlH_fL6ZzTtqPm8gpKiwsXVKCSXWB_9lKLrnx-HWrSDfSni67tB4dw3ezoohgwulvY0h718AVqC5Yr8XJbZOiRnUVT6p9uW0EvO_oNHyiUkmWaXgDgKImDed3OoDnKuBDJHFmdtuteO4lmjJ4j20M80R4g"  http://192.168.10.1/service1/test
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTQ3MzksImlhdCI6MTY0MTg5NDY3OSwiYXV0aF90aW1lIjoxNjQxODk0MTc3LCJqdGkiOiJhYTVhYTAyYS1lODc2LTRiN2UtYjA3Ny00MmVlNWIxNzEyNGQiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6Ilk0eC1DRndvakVndGhQSGEtckswQ0ZPY3JHb2NQN0hmTW12SE5lUDJ2ZHciLCJzZXNzaW9uX3N0YXRlIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiYWNyIjoiMCIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.dmjkosPxzq-NA38093K-GWbKlpqOYHd8d7DeyFhp6blsnmhoNA3ETqWYJn6htSEiE6dAyLl4atdzpVKlUBeQanv7Bm8YMxcfYzs3hciIyHNChgiCOAUGkB_t-punTlddBprJOp-5gRTFm6THDUIkwlvFzCObbMBgNMa9VVvaQXMxOM6bzb9ZiWEKGYDHJlH_fL6ZzTtqPm8gpKiwsXVKCSXWB_9lKLrnx-HWrSDfSni67tB4dw3ezoohgwulvY0h718AVqC5Yr8XJbZOiRnUVT6p9uW0EvO_oNHyiUkmWaXgDgKImDed3OoDnKuBDJHFmdtuteO4lmjJ4j20M80R4g"  http://192.168.10.1/service1/test
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTQ3MzksImlhdCI6MTY0MTg5NDY3OSwiYXV0aF90aW1lIjoxNjQxODk0MTc3LCJqdGkiOiJhYTVhYTAyYS1lODc2LTRiN2UtYjA3Ny00MmVlNWIxNzEyNGQiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6Ilk0eC1DRndvakVndGhQSGEtckswQ0ZPY3JHb2NQN0hmTW12SE5lUDJ2ZHciLCJzZXNzaW9uX3N0YXRlIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiYWNyIjoiMCIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiNGZjN2JmZjgtYzg0Yi00OGJhLWI4ZTctYmM0OTU2ZTFmMzQ4IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.dmjkosPxzq-NA38093K-GWbKlpqOYHd8d7DeyFhp6blsnmhoNA3ETqWYJn6htSEiE6dAyLl4atdzpVKlUBeQanv7Bm8YMxcfYzs3hciIyHNChgiCOAUGkB_t-punTlddBprJOp-5gRTFm6THDUIkwlvFzCObbMBgNMa9VVvaQXMxOM6bzb9ZiWEKGYDHJlH_fL6ZzTtqPm8gpKiwsXVKCSXWB_9lKLrnx-HWrSDfSni67tB4dw3ezoohgwulvY0h718AVqC5Yr8XJbZOiRnUVT6p9uW0EvO_oNHyiUkmWaXgDgKImDed3OoDnKuBDJHFmdtuteO4lmjJ4j20M80R4g"  http://192.168.10.1/service1/test
+microk8s kubectl apply -f authentication.yml
+vi authentication.yml
+cd
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+cd service-mesh-app/
+ls
+cd k8s/
+ls
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl http://192.168.10.1/service1/test
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+vi authentication.yml
+microk8s kubectl apply -f authentication.yml
+curl http://192.168.10.1/service1/test
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTgwNDcsImlhdCI6MTY0MTg5Nzk4NywiYXV0aF90aW1lIjoxNjQxODk3OTg3LCJqdGkiOiJlN2UwMmE3Ni1iMmE0LTQ0ZWEtOWUwMC1hMTg0ZWE0NDJkZmYiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6IkRjZFBLaEVqdHJTQmVENWJkYWZ1VmRYemlIZ2FuX0t2YUR6NmllZm9QbXMiLCJzZXNzaW9uX3N0YXRlIjoiN2Q4MmU0ZTQtN2IwYi00N2ZmLWJiNDEtYTJjMmFmOTdkZmIzIiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiN2Q4MmU0ZTQtN2IwYi00N2ZmLWJiNDEtYTJjMmFmOTdkZmIzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.WUxRoqXZ35nwj4eWHPCwXSISBNxHERPCUbHf0PLwVH6knVL5XBYNkMVvcL4okzCZPn204qiQwqT2VHuxHUfYLy8StLb1gVUp7-VI6jdg85-v3MC8h5MByiKfI3akvdAtIbCyLtWuqWKj24H2JUaF1q03wrdYuXdqdlxwWnb_2BU8HhwDEMFdxyIALfgun3l9Q0vlPnOYqkczwE9shKJZZu1FGGAZCTMTqrN-CA7iAxuFh89QhkNmzN2mcHHV5mxbEwObBw5ldmcBALzHGkTNWV1YN1gBxCf81vNWen5MRf7wOmAtbWmD53D9DxidQweKWQsdUiFBTAUxlggjv3b20w "http://192.168.10.1/service1/test
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTgwNDcsImlhdCI6MTY0MTg5Nzk4NywiYXV0aF90aW1lIjoxNjQxODk3OTg3LCJqdGkiOiJlN2UwMmE3Ni1iMmE0LTQ0ZWEtOWUwMC1hMTg0ZWE0NDJkZmYiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6IkRjZFBLaEVqdHJTQmVENWJkYWZ1VmRYemlIZ2FuX0t2YUR6NmllZm9QbXMiLCJzZXNzaW9uX3N0YXRlIjoiN2Q4MmU0ZTQtN2IwYi00N2ZmLWJiNDEtYTJjMmFmOTdkZmIzIiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiN2Q4MmU0ZTQtN2IwYi00N2ZmLWJiNDEtYTJjMmFmOTdkZmIzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.WUxRoqXZ35nwj4eWHPCwXSISBNxHERPCUbHf0PLwVH6knVL5XBYNkMVvcL4okzCZPn204qiQwqT2VHuxHUfYLy8StLb1gVUp7-VI6jdg85-v3MC8h5MByiKfI3akvdAtIbCyLtWuqWKj24H2JUaF1q03wrdYuXdqdlxwWnb_2BU8HhwDEMFdxyIALfgun3l9Q0vlPnOYqkczwE9shKJZZu1FGGAZCTMTqrN-CA7iAxuFh89QhkNmzN2mcHHV5mxbEwObBw5ldmcBALzHGkTNWV1YN1gBxCf81vNWen5MRf7wOmAtbWmD53D9DxidQweKWQsdUiFBTAUxlggjv3b20w" http://192.168.10.1/service1/test
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0
+microk8s kubectl port-forward service/service-mesh-webapp 8090:8080 --address 0.0.0.0 &
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTgzNTcsImlhdCI6MTY0MTg5ODI5NywiYXV0aF90aW1lIjoxNjQxODk4Mjk3LCJqdGkiOiI2NDg5NTc0Yi0xYmExLTRkYjYtYTU4ZC04OGEzMTgxODJhMjMiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6Im9renV0WWJzZjZXMHpiWm5ETGVvYVlRUzRnT3JRZ0J6VERVYjdtTFZXZGMiLCJzZXNzaW9uX3N0YXRlIjoiMDlhMzU5ODgtOThkOC00YzhjLThkMzQtMzc1MTNjYzJhYjFmIiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDlhMzU5ODgtOThkOC00YzhjLThkMzQtMzc1MTNjYzJhYjFmIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.hdM0J0NQc-s2gRPMQd-Rq3XCbQYzMvmbScph02PG-DOUMn_5P1VdYRjqgWusPTmglplylgUGiTJa69abqaLFdrFtW0SVFn2t4K-Ymi30k4uK1aWxcweBdtRPD9Fx9PhhBgmCENGKPSeC8xvmbI5C71E9BE3sYEE40eMKZ2GlOoP5grACsUB_dFv9E2GMXCv_bF8dlhSW7ZORtzAfk3-1a50og9mPn4K26gjsJoDLL5ZJxD1OyP7NddyNvI4ViTLLLq83PIoj4ky7SIEm62p-nsIzhCxnBQWGVWXy9AFokiSC8xlpY_yvWMvWuyR-S4vQbES1jPEbUFd7waseTUXFdw" http://192.168.10.1/service1/test
+curl http://192.168.10.1/service1/test
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjSVVxVTNQR0FKNUFUY0NGbmM5bFA0aWdXaUkxUnJRNGtrdnNYeHhzM2lJIn0.eyJleHAiOjE2NDE4OTgzNTcsImlhdCI6MTY0MTg5ODI5NywiYXV0aF90aW1lIjoxNjQxODk4Mjk3LCJqdGkiOiI2NDg5NTc0Yi0xYmExLTRkYjYtYTU4ZC04OGEzMTgxODJhMjMiLCJpc3MiOiJodHRwOi8vNTQuNjUuOTguMjIxOjcwMDAvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjgyYWJjMTI2LTBlYjQtNDg5Ni1hNjM0LWM3YmQwZjBkZjY1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYmFwcC1kZXYiLCJub25jZSI6Im9renV0WWJzZjZXMHpiWm5ETGVvYVlRUzRnT3JRZ0J6VERVYjdtTFZXZGMiLCJzZXNzaW9uX3N0YXRlIjoiMDlhMzU5ODgtOThkOC00YzhjLThkMzQtMzc1MTNjYzJhYjFmIiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDlhMzU5ODgtOThkOC00YzhjLThkMzQtMzc1MTNjYzJhYjFmIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0In0.hdM0J0NQc-s2gRPMQd-Rq3XCbQYzMvmbScph02PG-DOUMn_5P1VdYRjqgWusPTmglplylgUGiTJa69abqaLFdrFtW0SVFn2t4K-Ymi30k4uK1aWxcweBdtRPD9Fx9PhhBgmCENGKPSeC8xvmbI5C71E9BE3sYEE40eMKZ2GlOoP5grACsUB_dFv9E2GMXCv_bF8dlhSW7ZORtzAfk3-1a50og9mPn4K26gjsJoDLL5ZJxD1OyP7NddyNvI4ViTLLLq83PIoj4ky7SIEm62p-nsIzhCxnBQWGVWXy9AFokiSC8xlpY_yvWMvWuyR-S4vQbES1jPEbUFd7waseTUXFdw" http://192.168.10.1/service1/test
+vi authentication.yml
+git add authentication.yml
+git commit -m "Update authentication rules."
+vi authentication.yml
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0
+ls -la
+vi .profile
+vi .bashrc
+cd
+microk8s kubectl get all --all-namespaces
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+cd
+microk8s kubectl port-forward service/keycloak 7000:80 --address 0.0.0.0 &
+history | grep keyclaok
+history | grep keycloak
+microk8s kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode
+cd
+microk8s kubectl get all --all-namespaces
+cd
+microk8s kubectl get all --all-namespaces
+history | grep micro
+microk8s kubectl get all --all-namespaces
+ls -la
+cd
+microk8s kubectl get all --all-namespaces
+cd
+microk8s kubectl config view
+cd
+history | grep helm
+cd
+microk8s kubectl get all --all-namespaces
+exit
+cd
+microk8s kubectl get all --all-namespaces
+cd
+ls
+cd repo/
+ls
+cd sample-kubernetes/
+ls
+history | grep virtual
+microk8s kubectl describe virtualservice -n istio-network
+cd
+microk8s kubectl get all --all-namespaces
+microk8s kubectl describe istio-egressgateway-77c5c9d46d-lhpc2  -n istio-system
+microk8s kubectl get istio-egressgateway-77c5c9d46d-lhpc2  -n istio-system
+microk8s kubectl get istio-egressgateway-77c5c9d46d-lhpc2
+microk8s kubectl describe pod istio-egressgateway-77c5c9d46d-lhpc2  -n istio-system
+microk8s kubectl get all --all-namespaces
+cd
+microk8s kubectl describe istio-egressgateway-77c5c9d46d-lhpc2  -n istio-system
+microk8s kubectl describe pod istio-egressgateway-77c5c9d46d-lhpc2  -n istio-system
+microk8s kubectl get all --all-namespaces
+microk8s kubectl describe pod service-mesh-app-service2-75567689ff-k24zk -n istio-network
+cd
+history | grep kiali
+microk8s kubectl get svc -n istio-system
+history | grep istio
+history | grep kiali
+microk8s kubectl -n istio-system port-forward service/kiali 20001
+microk8s status
+history
+exit
+
+--------debugroom-sample-spring-cloud-stream-vpc---------
+
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s eks]$ aws ssm start-session --target i-0be1f2c01cdeb9497
+
+Starting session with SessionId: sample_app-mjczvl275q52pncv6povbptoji
+$
+$
+$ bash
+ssm-user@ip-172-7-1-102:/var/snap/amazon-ssm-agent/7993$
+ssm-user@ip-172-7-1-102:/var/snap/amazon-ssm-agent/7993$
+ssm-user@ip-172-7-1-102:/var/snap/amazon-ssm-agent/7993$ history
+    1  cd
+    2  pwd
+    3  ls -la
+    4  exit
+    5  sudo snap info microk8s
+    6  sudo snap install microk8s --classic --channel=1.21/stable
+    7  sudo usermod -a -G microk8s $USER
+    8  microk8s start
+    9  microk8s status --wait-ready
+   10  cd
+   11  exit
+   12  microk8s status --wait-ready
+   13  exit
+   14  cd
+   15  ls
+   16  microk8s stop
+   17  echo $USER
+   18  vi .bashrc
+   19  whoami
+   20  vi .bashrc
+   21  vi /etc/profile
+   22  ls -la
+   23  su
+   24  sudo usermod -a -G microk8s ssm-user
+   25  sudo chown -f -R ssm-user ~/.kube
+   26  microk8s start
+   27  exit
+   28  microk8s status --wait-ready
+   29  export USER=`whoami`
+   30  echo $USER
+   31  microk8s status --wait-ready
+   32  sudo usermod -a -G microk8s ssm-user
+   33  sudo chown -f -R ssm-user ~/.kube
+   34  microk8s status --wait-ready
+   35  sudo usermod -a -G microk8s $USER
+   36  sudo chown -f -R ssm-user ~/.kube
+   37  microk8s status --wait-ready
+   38  exit
+   39  microk8s status --wait-ready
+   40  sudo usermod -a -G microk8s $USER
+   41  sudo usermod -a -G microk8s ssm-user
+   42  export USER=`whoami`
+   43  sudo usermod -a -G microk8s $USER
+   44  sudo chown -f -R ssm-user ~/.kube
+   45  ls ~/
+   46  ls -la ~/
+   47  groups ssm-user
+   48  exit
+   49  echo $USER
+   50  microk8s status --wait-ready
+   51  microk8s start
+   52  microk8s status --wait-ready
+   53  echo $USER
+   54  sudo usermod -a -G microk8s $USER
+   55  sudo chown -f -R $USER ~/.kube
+   56  echo $USER
+   57  microk8s status --wait-ready
+   58  ls
+   59  ls -la
+   60  microk8s status --wait-ready
+   61  sudo chown -f -R $USER /var/snap/microk8s
+   62  microk8s status --wait-ready
+   63  vi .bashrc
+   64  vi .bash_aliases
+   65  source .bash_aliases
+   66  kubectl get all
+   67  echo $USER
+   68  export USER=`whoami`
+   69  groups ssm-user
+   70  sudo usermod -a -G microk8s $USER
+   71  sudo chown -f -R ssm-user ~/.kube
+   72  microk8s status --wait-ready
+   73  su ssm-user
+   74  sudo microk8s status --wait-ready
+   75  microk8s kubectl get all
+   76  microk8s stop
+   77  snap --help
+   78  sudo snap remove microk8s
+   79  snap install microk8s --classic --channel=1.23/stable
+   80  sudo snap install microk8s --classic --channel=1.23/stable
+   81  microk8s status --wait-ready
+   82  groups ssm-user
+   83  sudo chown -f -R ssm-user snap/microk8s/current/.kube
+   84  microk8s status --wait-ready
+   85  sudo usermod -a -G microk8s ssm-user
+   86  microk8s status --wait-ready
+   87  newgrp microk8s
+   88  cd
+   89  exit
+   90  cd
+   91  ls
+   92  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+   93  cd
+   94  microk8s status --wait-ready
+   95  kubectl get all
+   96  microk8s enable dns storage helm3 metallb
+   97  kubectl get all
+   98  microk8s status --wait-ready
+   99  ls
+  100  mkdir repos
+  101  ls
+  102  cd repos/
+  103  ls
+  104  mkdir debugroom
+  105  cd debugroom/
+  106  git clone https://github.com/debugroom/sample-spring-cloud-stream.git
+  107  cd sample-spring-cloud-stream/
+  108  ls
+  109  cd environment/k8s/
+  110  ls
+  111  kubectl create -f namespace.yml
+  112  kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+  113  kubectl get all -n kafka
+  114  kubectl get all
+  115  kubectl get all -n kafka
+  116  git fetch origin master
+  117  git fetch origin main
+  118  git merge FETCH_HEAD
+  119  kubectl apply -f kafka.yml -n kafka
+  120  git fetch origin main
+  121  git merge FETCH_HEAD
+  122  kubectl apply -f kafka.yml -n kafka
+  123  kubectl get all -n kafka
+  124  kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list sample-cluster-kafka-bootstrap:9092 --topic sample-topic
+  125  cd
+  126  kubectl port-forward service/sample-cluster-kafka-bootstrap 9042:9042 --address 0.0.0.0 &
+  127  kubectl get all
+  128  kubectl get all -n kafka
+  129  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9042:9042 --address 0.0.0.0 &
+  130  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  131  cd
+  132  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9042:9042 --address 0.0.0.0 &
+  133  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  134  cd
+  135  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  136  cd
+  137  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  138  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  139  kubectl get all -n kafka
+  140  kubectl delete pod kafka-consumer -n kafka
+  141  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  142  kubectl get all -n kafka
+  143  kubectl delete pod kafka-consumer -n kafka
+  144  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  145  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  146  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  147  cd
+  148  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  149  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  150  kubectl delete pod kafka-consumer -n kafka
+  151  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  152  cd
+  153  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  154  kubectl get all -n kafka
+  155  kubectl delete pod kafka-consumer -n kafka
+  156  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  157  kubectl port-forward service/sample-cluster-kafka-bootstrap -n kafka 9092:9092 --address 0.0.0.0 &
+  158  kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.27.1-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+  159  kubectl get all -n kafka
+  160  history
+
+------------eks-cluster-------------
+
+
+eksctl create cluster -f sample-eks/cluster.yml
+  297  ls
+  298  eksctl create cluster -f sample-eks/cluster.yml
+  299  aws cloudformation delete-stack eksctl-debugroom-sample-eks-cluster
+  300  aws cloudformation delete-stack --stack-name eksctl-debugroom-sample-eks-cluster
+  301  eksctl create cluster -f sample-eks/cluster.yml
+  302  aws cloudformation delete-stack --stack-name eksctl-debugroom-sample-eks-cluster
+  303  eksctl create cluster -f sample-eks/cluster.yml
+  304  kubectl get nodes
+  305  eksctl delete cluster --name debugroom-sample-eks --wait
+  306  ls
+  307  cd service-mesh-app/
+  308  ls
+  309  cd helm/
+  310  ls
+  311  helm3 create istio-environment
+  312  rm -rf istio-environment/templates/*.yaml
+  313  ls
+  314  cd ..
+  315  ls
+  316  cd ..
+  317  ls
+  318  eksctl create cluster -f sample-eks/cluster.yml
+  319  ls
+  320  cd ..
+  321  ls
+  322  cd ..
+  323  ls
+  324  eksctl delete cluster --name debugroom-sample-eks --wait
+  325  vi ~/.kube/config
+  326  ls
+  327  eksctl create cluster -f sample-eks/cluster.yml
+  328  kubectl get nodes
+  329  pwd
+  330  vi ~/.kube/config
+  331  kubectl get nodes
+  332  ls
+  333  cd service-mesh-app/
+  334  ls
+  335  cd helm/
+  336  ls
+  337  cd istio-environment/
+  338  ls
+  339  helm3 delpendency update
+  340  helm3 dependency update
+  341  cd charts/
+  342  ls
+  343  helm3 create istio-init
+  344  rm -rf istio-init/templates/*.yaml
+  345  ls
+  346  cd ..
+  347  ls
+  348  helm3 dependency update
+  349  helm template . --set istio-init.enabled=true
+  350  helm3 template . --set istio-init.enabled=true
+  351  rm -rf charts/istio-init/templates/tests/
+  352  helm3 template . --set istio-init.enabled=true
+  353  rm -rf charts/istio-init/templates/NOTES.txt
+  354  rm -rf charts/istio-init/templates/_helpers.tpl
+  355  helm3 template . --set istio-init.enabled=true
+  356  rm -rf templates
+  357  helm3 template . --set istio-init.enabled=true
+  358  helm3 template . --set istio-base.enabled=true
+  359  helm3 template release-$(date `+%Y%m%d`) . --set istio-base.enabled=true
+  360  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true
+  361  helm3 template release-$(date '+%Y%m%d') . --set istiod.enabled=true
+  362  ls
+  363  helm3 template . --set istio-init.enabled=true > istio-init.txt
+  364  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true > istio-base.txt
+  365  helm3 template release-$(date '+%Y%m%d') . --set istiod.enabled=true > istiod.txt
+  366  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enabled.=true > istio-ingress.txt
+  367  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enabled=true > istio-ingress.txt
+  368  ls
+  369  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enabled=true > istio-ingress.txt
+  370  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enables=true > istio-ingress.txt
+  371  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enabled=true > istio-ingress.txt
+  372  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway.enables=true > istio-ingress.txt
+  373  helm3 template release-$(date '+%Y%m%d') . --set istioIngressGatewayEnabled=true > istio-ingress.txt
+  374  helm3 template release-$(date '+%Y%m%d') . --set istioIngressGatewayEnables=true > istio-ingress.txt
+  375  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true > istio-ingress.txt
+  376  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=false > istio-ingress.txt
+  377  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true > istio-ingress.txt
+  378  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network > istio-ingress.txt
+  379  helm3 template release-$(date '+%Y%m%d') . --set istio-egressgateway.enables=true > istio-egress.txt
+  380  helm3 template release-$(date '+%Y%m%d') . --set istio-egressgateway.enabled=true > istio-egress.txt
+  381  helm3 template . --set istio-init.enabled=true > istio-init.txt
+  382  helm3 template . --set istio-init.enabled=true | kubectl apply -f
+  383  helm3 template . --set istio-init.enabled=true | kubectl apply -f -
+  384  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true | kubectl apply -f -
+  385  helm3 template release-$(date '+%Y%m%d') . -n istio-system --set istiod.enabled=true | kubectl apply -f -
+  386  kubectl get nodes
+  387  kubectl get nodes -n istio-system
+  388  kubectl get all -n istio-system
+  389  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  390  kubectl get all -n istio-system
+  391  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  392  kubectl get all -n istio-system
+  393  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  394  kubectl get all -n istio-system
+  395  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  396  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  397  kubectl get all -n istio-system
+  398  kubectl describe service istio-ingressgateway
+  399  kubectl describe service service/istio-ingressgateway
+  400  kubectl describe service istio-ingressgateway
+  401  kubectl get service/istio-ingressgateway
+  402  kubectl get service/istio-
+  403  kubectl describe service istiod
+  404  kubectl describe service service/istio-ingressgateway -n istio-system
+  405  kubectl describe service istio-ingressgateway -n istio-system
+  406  kubectl get all -n istio-system
+  407  kubectl describe service istio-ingressgateway -n istio-system
+  408  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  409  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  410  kubectl get all -n istio-system
+  411  kubectl describe service istio-ingressgateway -n istio-system
+  412  kubectl get all -n istio-system
+  413  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  414  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  415  kubectl get all -n istio-system
+  416  kubectl describe service istio-ingressgateway -n istio-system
+  417  kubectl lgos service istio-ingressgateway -n istio-system
+  418  kubectl logs service istio-ingressgateway -n istio-system
+  419  kubectl get all -n istio-system
+  420  kubectl get deployment -n kube-system aws-load-balancer-controller
+  421  kubectl describe service istio-ingressgateway -n istio-system
+  422  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  423  kubectl describe service istio-ingressgateway -n istio-system
+  424  kubectl get all -n istio-system
+  425  kubectl get deployment -n kube-system alb-ingress-controller
+  426  helm3 repo add eks https://aws.github.io/eks-charts
+  427  helm repo update
+  428  helm3 repo update
+  429  helm3 install aws-load-balancer-controller eks/aws-load-balancer-controller - kube-system --set clusterName=debugroom-sample-eks --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+  430  helm3 install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=debugroom-sample-eks --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+  431  helm3 template aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=debugroom-sample-eks --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+  432  kubectl get deployment -n kube-system alb-ingress-controller
+  433  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  434  kubectl get all -n istio-system
+  435  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  436  kubectl get all -n istio-system
+  437  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  438  kubectl get all -n istio-system
+  439  helm3 template release-$(date '+%Y%m%d') . --set istiod.enabled=true > istiod.txt
+  440  kubectl get all -n istio-system
+  441  kubectl get all -n kube-system
+  442  kubectl get all -n istio-system
+  443  kubectl get all -n isu
+  444  kubectl get all -n kube-system
+  445  kubectl get service istio-ingressgateway -n istio-system
+  446  kubectl describe service istio-ingressgateway -n istio-system
+  447  curl http://localhost:8082/service2/sample
+  448  curl http://localhost:8082/service2/users/1
+  449  helm repo list
+  450  history | grep helm
+  451  helm repo add chartmuseum http://localhost:8000
+  452  helm repo update
+  453  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  454  kubectl get all
+  455  kubectl get all -n default
+  456  kubectl get service -n default
+  457  kubectl get service -n default
+  458  kubectl get all -n default
+  459  kubectl get all --all-namespaces
+  460  kubectl logs service-mesh-app-service2-84d7cd6954-79nlz
+  461  kubectl logs service-mesh-app-service2-84d7cd6954-79nlz  -n istio-network
+  462  helm uninstall service-mesh-app-service2
+  463  kubectl get all --all-namespaces
+  464  kubectl get serviceaccount
+  465  kubectl get serviceaccount --all-namespaces
+  466  kubectl get serviceaccount aws-load-balancer-controller -o yaml
+  467  kubectl get serviceaccount aws-load-balancer-controller -n kube-system -o yaml
+  468  kubectl get secret -n kube-system
+  469  kubectl get secret aws-load-balancer-controller-token-f6gq8 -n kube-system -o yaml
+  470  eksctl create iamserviceaccount --name service-mesh-app-service2-serviceaccount --namespace istio-network --cluster debugroom-sample-eks --attach-policy-arn arn:aws:iam::aws:policy/AWSCloudFormationFullAccess --approve
+  471  helm repo update
+  472  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  473  kubectl get all --all-namespaces
+  474  kubectl logs service-mesh-app-service2-57f46dd7db-pc9kv -n istio-network
+  475  helm uninstall service-mesh-app-service2
+  476  kubectl get serviceaccount --all-namespaces
+  477  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  478  kubectl get all --all-namespaces
+  479  kubectl get service-mesh-app-service2-57f46dd7db-zfmrq -n istio-network -o yaml
+  480  kubectl get pod service-mesh-app-service2-57f46dd7db-zfmrq -n istio-network -o yaml
+  481  helm uninstall service-mesh-app-service2
+  482  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  483  kubectl get all --all-namespaces
+  484  kubectl logs service-mesh-app-service2-57f46dd7db-8bd58  -n istio-network
+  485  helm uninstall service-mesh-app-service2
+  486  helm repo update
+  487  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  488  kubectl get all --all-namespaces
+  489  kubectl logs service-mesh-app-service2-57f46dd7db-l75r9  -n istio-network
+  490  helm uninstall service-mesh-app-service2
+  491  helm repo update
+  492  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  493  kubectl get all --all-namespaces
+  494  kubectl logs service-mesh-app-service2-57f46dd7db-7mw7z  -n istio-network
+  495  kubectl get all --all-namespaces
+  496  helm uninstall service-mesh-app-service2
+  497  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  498  kubectl get all --all-namespaces
+  499  kubectl logs pod/service-mesh-app-service2-57f46dd7db-jqftc    -n istio-network
+  500  helm uninstall service-mesh-app-service2
+  501  kubectl get all --all-namespaces
+  502  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  503  kubectl get all --all-namespaces
+  504  kubectl logs pod/service-mesh-app-service2-57f46dd7db-fglgj  -n istio-network
+  505  helm uninstall service-mesh-app-service2
+  506  kubectl get all --all-namespaces
+  507  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  508  kubectl get all --all-namespaces
+  509  kubectl logs pod/service-mesh-app-service2-57f46dd7db-6hjhn    -n istio-network
+  510  kubectl get all --all-namespaces
+  511  kubectl logs pod/service-mesh-app-service2-57f46dd7db-6hjhn    -n istio-network
+  512  helm uninstall service-mesh-app-service2
+  513  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  514  kubectl get all --all-namespaces
+  515  kubectl logs pod/service-mesh-app-service2-57f46dd7db-97dd2   -n istio-network
+  516  kubectl get all --all-namespaces
+  517  curl http://sample-ingress-6419016c6db2416e.elb.ap-northeast-1.amazonaws.com/service2/sample
+  518  ls
+  519  helm template . --set istio-routing-setup=true
+  520  helm template . --set istio-routing-setup.enabled=true
+  521  helm template . --set istio-init.enabled=true
+  522  helm template . --set istio-routing-setup.enabled=true
+  523  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  524  helm template . --set istio-routing-setup.enabled=true -n istio-system | kubectl apply -f -
+  525  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -n istio-system -
+  526  curl http://sample-ingress-6419016c6db2416e.elb.ap-northeast-1.amazonaws.com/service2/sample
+  527  helm status istiod -n istio-system
+  528  helm repo add istio https://istio-release.storage.googleapis.com/charts
+  529  helm repo update
+  530  helm status istiod -n istio-system
+  531  helm3 status istiod -n istio-system
+  532  helm status istiod
+  533  helm ls
+  534  helm ls -n istio-system
+  535  helm3 status istiod -n istio-system
+  536  helm3 ls -n istio-system
+  537  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  538  kubectl get all --all-namespaces
+  539  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  540  kubectl get all --all-namespaces
+  541  helm ls -n istio-system
+  542  helm ls
+  543  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  544  kubectl get all --all-namespaces
+  545  ls
+  546  istioctl --veriosn
+  547  istioctl --version
+  548  istioctl version
+  549  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  550  kubectl get all --all-namespaces
+  551  helm template . --set istio-routing-setup.enabled=true | istioctl validate -
+  552  helm template . --set istio-routing-setup.enabled=true | istioctl validate
+  553  istioctl x precheck
+  554  ls
+  555  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true > istio-base_current.txt
+  556  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.enableCRDTemplates=true > istio-base_crd.txt
+  557  helm3 template release-$(date '+%Y%m%d') . --set base.enableCRDTemplates=true > istio-base_crd.txt
+  558  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.enableCRDTemplates=true > istio-base_crd.txt
+  559  kubectl get crd -oname
+  560  kubectl get crd -oname | grep --coloer=never 'istio.io'
+  561  kubectl get crd -oname | grep --color=never 'istio.io'
+  562  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set istio-base.enableCRDTemplates=true > istio-base_crd.txt
+  563  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set istio-base.base.enableCRDTemplates=true > istio-base_crd.txt
+  564  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.base.enableCRDTemplates=true > istio-base_crd.txt
+  565  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set istio-base.base.enableCRDTemplates=true > istio-base_crd.txt
+  566  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.base.enableCRDTemplates=true > istio-base_crd.txt
+  567  kubectl get crd -oname
+  568  kubectl get all --all-namespaces
+  569  helm uninstall service-mesh-app-service2
+  570  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  571  kubectl get all --all-namespaces
+  572  helm3 template release-$(date '+%Y%m%d') . -n istio-system --set istiod.enabled=true | kubectl delete -f -
+  573  kubectl get all --all-namespaces
+  574  kubectl get all -n istio-system
+  575  kubectl get serviceaccount -n istio-system
+  576  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.base.enableCRDTemplates=true | kubectl apply -f -
+  577  helm template release-$(date '+%Y%m%d') . --set istiod.enabled=true | kubectl apply -f -
+  578  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  579  kubectl get all -n istio-system
+  580  kubectl get all --all-namespaces
+  581  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  582  helm template release-$(date '+%Y%m%d') . --set istiod.enabled=true | kubectl delete -f -
+  583  helm3 template release-$(date '+%Y%m%d') . --set istio-base.enabled=true --set base.base.enableCRDTemplates=true | kubectl delete -f -
+  584  helm template release-$(date '+%Y%m%d') . -n istio-system --set istio-base.enabled=true --set base.base.enableCRDTemplates=true | kubectl apply -f -
+  585  helm template release-$(date '+%Y%m%d') . -n istio-system --set istiod.enabled=true | kubectl apply -f -
+  586  kubectl get all --all-namespaces
+  587  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl apply -f -
+  588  kubectl get all -n istio-system
+  589  kubectl get all --all-namespaces
+  590  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system | kubectl delete -f -
+  591  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  592  kubectl get all --all-namespaces
+  593  kubectl get all -n istio-system
+  594  kubectl get all -n istio-network
+  595  kubectl get crd -oname
+  596  kubectl get all -n istio-system
+  597  kubectl get all --all-namespaces
+  598  istioctl admin log
+  599  istioctl admin log gateway:info
+  600  istioctl admin log gateway:info -n istio-network
+  601  istioctl admin log default:info
+  602  istioctl admin log istiod-686fbd9984-plnl6
+  603  kubectl get all --all-namespaces
+  604  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+  605  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network > istio-ingress-20220522.txt
+  606  helm template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system > istio-ingress-20220522-2.txt
+  607  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-system > istio-ingress-20220522-2.txt
+  608  kubectl get all --all-namespaces
+  609  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  610  kubectl get all --all-namespaces
+  611  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+  612  kubectl get all --all-namespaces
+  613  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  614  kubectl get all --all-namespaces
+  615  helm template . --set istio-routing-setup.enabled=true | kubectl
+  616  helm3 template . --set istio-routing-setup.enabled=true > istio-routing-helm3.txt
+  617  helm install service-mesh-app-service2 chartmuseum/service-mesh-app-service2 --devel
+  618  kubectl get all --all-namespaces
+  619  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  620  curl http://sample-ingress-8349fc535cd0523e.elb.ap-northeast-1.amazonaws.com/service2/sample
+  621  helm template . --set istio-routing-setup.enabled=true | kubectl delete -f -
+  622  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+  623  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  624  kubectl get all --all-namespaces
+  625  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+  626  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  627  kubectl get all --all-namespaces
+  628  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  629  curl http://sample-ingress-4160bafe47335e84.elb.ap-northeast-1.amazonaws.com/service2/sample
+  630  helm template . --set istio-routing-setup.enabled=true | kubectl delete -f -
+  631  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+  632  helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl apply -f -
+  633  kubectl get all --all-namespaces
+  634  helm template . --set istio-routing-setup.enabled=true | kubectl apply -f -
+  635  kubectl get all --all-namespaces
+  636  curl http://sample-ingress-ed76fcd7a5383d04.elb.ap-northeast-1.amazonaws.com/service2/sample
+  637  curl http://sample-ingress-ed76fcd7a5383d04.elb.ap-northeast-1.amazonaws.com
+  638  curl http://sample-ingress-ed76fcd7a5383d04.elb.ap-northeast-1.amazonaws.com/service2/sample
+  639  kubectl get all --all-namespaces
+  640  kubectl get gateway --all-namespaces
+  641  kubectl get ingress --all-namespaces
+  642  kubectl get svc -n istio-system
+
+eks-cluster delete operation -----
+
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ eksctl delete iamserviceaccount --name service-mesh-app-service2-serviceaccount --namespace istio-network --cluster debugroom-sample-eks
+2024-07-03 19:56:08 [ℹ]  eksctl version 0.85.0
+2024-07-03 19:56:08 [ℹ]  using region ap-northeast-1
+2024-07-03 19:56:09 [ℹ]  1 iamserviceaccount (istio-network/service-mesh-app-service2-serviceaccount) was included (based on the include/exclude rules)
+2024-07-03 19:56:09 [ℹ]  1 task: {
+    2 sequential sub-tasks: {
+        delete IAM role for serviceaccount "istio-network/service-mesh-app-service2-serviceaccount" [async],
+        delete serviceaccount "istio-network/service-mesh-app-service2-serviceaccount",
+    } }2024-07-03 19:56:09 [ℹ]  will delete stack "eksctl-debugroom-sample-eks-addon-iamserviceaccount-istio-network-service-mesh-app-service2-serviceaccount"
+2024-07-03 19:56:10 [ℹ]  deleted serviceaccount "istio-network/service-mesh-app-service2-serviceaccount"
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ kubectl get all --all-namespaces
+NAMESPACE       NAME                                                READY   STATUS    RESTARTS   AGE
+istio-network   pod/service-mesh-app-service1-7fcf9f55b6-qtxv7      2/2     Running   0          2y31d
+istio-network   pod/service-mesh-app-service2-57f46dd7db-hg52g      2/2     Running   0          2y42d
+istio-system    pod/istio-ingressgateway-844f9d5fdf-nrkj4           1/1     Running   0          2y42d
+istio-system    pod/istiod-686fbd9984-plnl6                         1/1     Running   0          2y43d
+istio-system    pod/kiali-5b4978d85b-lbwd8                          1/1     Running   0          658d
+istio-system    pod/prometheus-d97d6dc4d-2cpwp                      2/2     Running   0          2y37d
+kube-system     pod/aws-load-balancer-controller-5d9c65c567-bn8dx   1/1     Running   0          2y73d
+kube-system     pod/aws-load-balancer-controller-5d9c65c567-rdh6t   1/1     Running   2          2y73d
+kube-system     pod/aws-node-4tmx2                                  1/1     Running   0          2y113d
+kube-system     pod/aws-node-5tvss                                  1/1     Running   0          2y113d
+kube-system     pod/aws-node-hmbsm                                  1/1     Running   0          2y113d
+kube-system     pod/coredns-76f4967988-27jt9                        1/1     Running   0          2y113d
+kube-system     pod/coredns-76f4967988-wm2mh                        1/1     Running   0          2y113d
+kube-system     pod/kube-proxy-7vtrr                                1/1     Running   0          2y113d
+kube-system     pod/kube-proxy-bp8ng                                1/1     Running   0          2y113d
+kube-system     pod/kube-proxy-jkw7n                                1/1     Running   0          2y113d
+
+NAMESPACE       NAME                                        TYPE           CLUSTER-IP      EXTERNAL-IP                                                        PORT(S)                                      AGE
+default         service/kubernetes                          ClusterIP      10.100.0.1      <none>                                                             443/TCP                                      2y113d
+istio-network   service/service-mesh-app-service1           ClusterIP      10.100.16.255   <none>                                                             8080/TCP                                     2y31d
+istio-network   service/service-mesh-app-service2           ClusterIP      10.100.76.225   <none>                                                             8080/TCP                                     2y42d
+istio-system    service/istio-ingressgateway                LoadBalancer   10.100.88.34    sample-ingress-5cd2282e540d8790.elb.ap-northeast-1.amazonaws.com   15021:30296/TCP,80:31266/TCP,443:30969/TCP   2y42d
+istio-system    service/istiod                              ClusterIP      10.100.58.143   <none>                                                             15010/TCP,15012/TCP,443/TCP,15014/TCP        2y43d
+istio-system    service/kiali                               ClusterIP      10.100.141.22   <none>                                                             20001/TCP,9090/TCP                           658d
+istio-system    service/prometheus                          ClusterIP      10.100.7.227    <none>                                                             9090/TCP                                     2y37d
+kube-system     service/aws-load-balancer-webhook-service   ClusterIP      10.100.169.79   <none>                                                             443/TCP                                      2y73d
+kube-system     service/kube-dns                            ClusterIP      10.100.0.10     <none>                                                             53/UDP,53/TCP                                2y113d
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+kube-system   daemonset.apps/aws-node     3         3         3       3            3           <none>          2y113d
+kube-system   daemonset.apps/kube-proxy   3         3         3       3            3           <none>          2y113d
+
+NAMESPACE       NAME                                           READY   UP-TO-DATE   AVAILABLE   AGE
+istio-network   deployment.apps/service-mesh-app-service1      1/1     1            1           2y31d
+istio-network   deployment.apps/service-mesh-app-service2      1/1     1            1           2y42d
+istio-system    deployment.apps/istio-ingressgateway           1/1     1            1           2y42d
+istio-system    deployment.apps/istiod                         1/1     1            1           2y43d
+istio-system    deployment.apps/kiali                          1/1     1            1           658d
+istio-system    deployment.apps/prometheus                     1/1     1            1           2y37d
+kube-system     deployment.apps/aws-load-balancer-controller   2/2     2            2           2y73d
+kube-system     deployment.apps/coredns                        2/2     2            2           2y113d
+
+NAMESPACE       NAME                                                      DESIRED   CURRENT   READY   AGE
+istio-network   replicaset.apps/service-mesh-app-service1-7fcf9f55b6      1         1         1       2y31d
+istio-network   replicaset.apps/service-mesh-app-service2-57f46dd7db      1         1         1       2y42d
+istio-system    replicaset.apps/istio-ingressgateway-844f9d5fdf           1         1         1       2y42d
+istio-system    replicaset.apps/istiod-686fbd9984                         1         1         1       2y43d
+istio-system    replicaset.apps/kiali-5b4978d85b                          1         1         1       658d
+istio-system    replicaset.apps/prometheus-d97d6dc4d                      1         1         1       2y37d
+kube-system     replicaset.apps/aws-load-balancer-controller-5d9c65c567   2         2         2       2y73d
+kube-system     replicaset.apps/coredns-76f4967988                        2         2         2       2y113d
+
+NAMESPACE      NAME                                                       REFERENCE                         TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+istio-system   horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   <unknown>/80%   1         5         1          2y42d
+istio-system   horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 <unknown>/80%   1         5         1          2y43d
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ kubectl delete namespace istio-network
+namespace "istio-network" deleted
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ kubectl get all --all-namespaces
+NAMESPACE      NAME                                                READY   STATUS    RESTARTS   AGE
+istio-system   pod/istio-ingressgateway-844f9d5fdf-nrkj4           1/1     Running   0          2y42d
+istio-system   pod/istiod-686fbd9984-plnl6                         1/1     Running   0          2y43d
+istio-system   pod/kiali-5b4978d85b-lbwd8                          1/1     Running   0          658d
+istio-system   pod/prometheus-d97d6dc4d-2cpwp                      2/2     Running   0          2y37d
+kube-system    pod/aws-load-balancer-controller-5d9c65c567-bn8dx   1/1     Running   0          2y73d
+kube-system    pod/aws-load-balancer-controller-5d9c65c567-rdh6t   1/1     Running   2          2y73d
+kube-system    pod/aws-node-4tmx2                                  1/1     Running   0          2y113d
+kube-system    pod/aws-node-5tvss                                  1/1     Running   0          2y113d
+kube-system    pod/aws-node-hmbsm                                  1/1     Running   0          2y113d
+kube-system    pod/coredns-76f4967988-27jt9                        1/1     Running   0          2y113d
+kube-system    pod/coredns-76f4967988-wm2mh                        1/1     Running   0          2y113d
+kube-system    pod/kube-proxy-7vtrr                                1/1     Running   0          2y113d
+kube-system    pod/kube-proxy-bp8ng                                1/1     Running   0          2y113d
+kube-system    pod/kube-proxy-jkw7n                                1/1     Running   0          2y113d
+
+NAMESPACE      NAME                                        TYPE           CLUSTER-IP      EXTERNAL-IP                                                        PORT(S)                                      AGE
+default        service/kubernetes                          ClusterIP      10.100.0.1      <none>                                                             443/TCP                                      2y113d
+istio-system   service/istio-ingressgateway                LoadBalancer   10.100.88.34    sample-ingress-5cd2282e540d8790.elb.ap-northeast-1.amazonaws.com   15021:30296/TCP,80:31266/TCP,443:30969/TCP   2y42d
+istio-system   service/istiod                              ClusterIP      10.100.58.143   <none>                                                             15010/TCP,15012/TCP,443/TCP,15014/TCP        2y43d
+istio-system   service/kiali                               ClusterIP      10.100.141.22   <none>                                                             20001/TCP,9090/TCP                           658d
+istio-system   service/prometheus                          ClusterIP      10.100.7.227    <none>                                                             9090/TCP                                     2y37d
+kube-system    service/aws-load-balancer-webhook-service   ClusterIP      10.100.169.79   <none>                                                             443/TCP                                      2y73d
+kube-system    service/kube-dns                            ClusterIP      10.100.0.10     <none>                                                             53/UDP,53/TCP                                2y113d
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+kube-system   daemonset.apps/aws-node     3         3         3       3            3           <none>          2y113d
+kube-system   daemonset.apps/kube-proxy   3         3         3       3            3           <none>          2y113d
+
+NAMESPACE      NAME                                           READY   UP-TO-DATE   AVAILABLE   AGE
+istio-system   deployment.apps/istio-ingressgateway           1/1     1            1           2y42d
+istio-system   deployment.apps/istiod                         1/1     1            1           2y43d
+istio-system   deployment.apps/kiali                          1/1     1            1           658d
+istio-system   deployment.apps/prometheus                     1/1     1            1           2y37d
+kube-system    deployment.apps/aws-load-balancer-controller   2/2     2            2           2y73d
+kube-system    deployment.apps/coredns                        2/2     2            2           2y113d
+
+NAMESPACE      NAME                                                      DESIRED   CURRENT   READY   AGE
+istio-system   replicaset.apps/istio-ingressgateway-844f9d5fdf           1         1         1       2y42d
+istio-system   replicaset.apps/istiod-686fbd9984                         1         1         1       2y43d
+istio-system   replicaset.apps/kiali-5b4978d85b                          1         1         1       658d
+istio-system   replicaset.apps/prometheus-d97d6dc4d                      1         1         1       2y37d
+kube-system    replicaset.apps/aws-load-balancer-controller-5d9c65c567   2         2         2       2y73d
+kube-system    replicaset.apps/coredns-76f4967988                        2         2         2       2y113d
+
+NAMESPACE      NAME                                                       REFERENCE                         TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+istio-system   horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   <unknown>/80%   1         5         1          2y42d
+istio-system   horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 <unknown>/80%   1         5         1          2y43d
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ helm3 template release-$(date '+%Y%m%d') . --set istio-ingressgateway-enabled=true -n istio-network | kubectl delete -f -
+Error from server (NotFound): error when deleting "STDIN": serviceaccounts "istio-ingressgateway" not found
+Error from server (NotFound): error when deleting "STDIN": roles.rbac.authorization.k8s.io "istio-ingressgateway" not found
+Error from server (NotFound): error when deleting "STDIN": rolebindings.rbac.authorization.k8s.io "istio-ingressgateway" not found
+Error from server (NotFound): error when deleting "STDIN": services "istio-ingressgateway" not found
+Error from server (NotFound): error when deleting "STDIN": deployments.apps "istio-ingressgateway" not found
+Error from server (NotFound): error when deleting "STDIN": horizontalpodautoscalers.autoscaling "istio-ingressgateway" not found
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ kubectl delete namespace istio-system
+namespace "istio-system" deleted
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ kubectl get all --all-namespaces
+NAMESPACE     NAME                                                READY   STATUS    RESTARTS   AGE
+kube-system   pod/aws-load-balancer-controller-5d9c65c567-bn8dx   1/1     Running   0          2y73d
+kube-system   pod/aws-load-balancer-controller-5d9c65c567-rdh6t   1/1     Running   2          2y73d
+kube-system   pod/aws-node-4tmx2                                  1/1     Running   0          2y113d
+kube-system   pod/aws-node-5tvss                                  1/1     Running   0          2y113d
+kube-system   pod/aws-node-hmbsm                                  1/1     Running   0          2y113d
+kube-system   pod/coredns-76f4967988-27jt9                        1/1     Running   0          2y113d
+kube-system   pod/coredns-76f4967988-wm2mh                        1/1     Running   0          2y113d
+kube-system   pod/kube-proxy-7vtrr                                1/1     Running   0          2y113d
+kube-system   pod/kube-proxy-bp8ng                                1/1     Running   0          2y113d
+kube-system   pod/kube-proxy-jkw7n                                1/1     Running   0          2y113d
+
+NAMESPACE     NAME                                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+default       service/kubernetes                          ClusterIP   10.100.0.1      <none>        443/TCP         2y113d
+kube-system   service/aws-load-balancer-webhook-service   ClusterIP   10.100.169.79   <none>        443/TCP         2y73d
+kube-system   service/kube-dns                            ClusterIP   10.100.0.10     <none>        53/UDP,53/TCP   2y113d
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+kube-system   daemonset.apps/aws-node     3         3         3       3            3           <none>          2y113d
+kube-system   daemonset.apps/kube-proxy   3         3         3       3            3           <none>          2y113d
+
+NAMESPACE     NAME                                           READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   deployment.apps/aws-load-balancer-controller   2/2     2            2           2y73d
+kube-system   deployment.apps/coredns                        2/2     2            2           2y113d
+
+NAMESPACE     NAME                                                      DESIRED   CURRENT   READY   AGE
+kube-system   replicaset.apps/aws-load-balancer-controller-5d9c65c567   2         2         2       2y73d
+kube-system   replicaset.apps/coredns-76f4967988                        2         2         2       2y113d
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$
+[DEBUGROOM\kohei.kawabata@a-16bf61uhmru1s istio-environment]$ eksctl delete cluster --name debugroom-sample-eks --wait
+2024-07-03 20:06:49 [ℹ]  eksctl version 0.85.0
+2024-07-03 20:06:49 [ℹ]  using region ap-northeast-1
+2024-07-03 20:06:50 [ℹ]  deleting EKS cluster "debugroom-sample-eks"
+2024-07-03 20:06:50 [ℹ]  will drain 1 unmanaged nodegroup(s) in cluster "debugroom-sample-eks"
+2024-07-03 20:06:51 [ℹ]  cordon node "ip-172-8-25-137.ap-northeast-1.compute.internal"
+2024-07-03 20:06:51 [ℹ]  cordon node "ip-172-8-52-162.ap-northeast-1.compute.internal"
+2024-07-03 20:06:51 [ℹ]  cordon node "ip-172-8-82-249.ap-northeast-1.compute.internal"
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-hmbsm, kube-system/kube-proxy-bp8ng
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:51 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:52 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:52 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:52 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:53 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:53 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:54 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:54 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:54 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:55 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:55 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:56 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:56 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:56 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:57 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:57 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:58 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:58 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:06:58 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:06:58 [!]  pod eviction error ("error evicting pod: kube-system/aws-load-balancer-controller-5d9c65c567-rdh6t: pods \"aws-load-balancer-controller-5d9c65c567-rdh6t\" not found") on node ip-172-8-25-137.ap-northeast-1.compute.internal
+2024-07-03 20:07:03 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-5tvss, kube-system/kube-proxy-7vtrr
+2024-07-03 20:07:03 [!]  ignoring DaemonSet-managed Pods: kube-system/aws-node-4tmx2, kube-system/kube-proxy-jkw7n
+2024-07-03 20:07:03 [✔]  drained all nodes: [ip-172-8-25-137.ap-northeast-1.compute.internal ip-172-8-52-162.ap-northeast-1.compute.internal ip-172-8-82-249.ap-northeast-1.compute.internal]
+2024-07-03 20:07:04 [ℹ]  deleted 0 Fargate profile(s)
+2024-07-03 20:07:04 [✔]  kubeconfig has been updated
+2024-07-03 20:07:04 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
+2024-07-03 20:07:05 [ℹ]
+3 sequential tasks: { delete nodegroup "debugroom-sample-eks-node-1",
+    2 sequential sub-tasks: {
+        2 sequential sub-tasks: {
+            delete IAM role for serviceaccount "kube-system/aws-load-balancer-controller",
+            delete serviceaccount "kube-system/aws-load-balancer-controller",
+        },
+        delete IAM OIDC provider,
+    }, delete cluster control plane "debugroom-sample-eks"
+}
+2024-07-03 20:07:06 [ℹ]  will delete stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:07:06 [ℹ]  waiting for stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1" to get deleted
+2024-07-03 20:07:06 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:07:23 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:07:41 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:07:58 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:08:14 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:08:30 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:08:49 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:09:08 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:09:24 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-nodegroup-debugroom-sample-eks-node-1"
+2024-07-03 20:09:24 [ℹ]  will delete stack "eksctl-debugroom-sample-eks-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
+2024-07-03 20:09:24 [ℹ]  waiting for stack "eksctl-debugroom-sample-eks-addon-iamserviceaccount-kube-system-aws-load-balancer-controller" to get deleted
+2024-07-03 20:09:24 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
+2024-07-03 20:09:42 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
+2024-07-03 20:09:42 [ℹ]  deleted serviceaccount "kube-system/aws-load-balancer-controller"
+2024-07-03 20:09:43 [ℹ]  will delete stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:09:43 [ℹ]  waiting for stack "eksctl-debugroom-sample-eks-cluster" to get deleted
+2024-07-03 20:09:43 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:10:02 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:10:18 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:10:35 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:10:53 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:11:10 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:11:25 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:11:45 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:12:01 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:12:18 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:12:34 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:12:53 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:13:09 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:13:25 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:13:44 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:14:02 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:14:22 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:14:41 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:14:57 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:15:15 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:15:30 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:15:49 [ℹ]  waiting for CloudFormation stack "eksctl-debugroom-sample-eks-cluster"
+2024-07-03 20:15:49 [✔]  all cluster resources were deleted
