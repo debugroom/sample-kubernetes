@@ -75,8 +75,8 @@
                 <artifactId>kubernetes-maven-plugin</artifactId>
                 <configuration>
                     <helm>
-                        <home>http://54.65.98.221:8000</home>
-                        <sources>http://54.65.98.221:8000</sources>
+                        <home>http://13.231.124.138:8000</home>
+                        <sources>http://13.231.124.138:8000</sources>
                         <keywords>sample-app</keywords>
                         <maintainers>
                             <maintainer>
@@ -86,14 +86,14 @@
                         </maintainers>
                         <stableRepository>
                             <name>sample-chartmuseum-snapshot-repository</name>
-                            <url>http://54.65.98.221:8000/api/charts</url>
+                            <url>http://13.231.124.138:8000/api/charts</url>
                             <username>debugroom</username>
                             <password>debugroom</password>
                             <type>CHARTMUSEUM</type>
                         </stableRepository>
                         <snapshotRepository>
                             <name>sample-chartmuseum-snapshot-repository</name>
-                            <url>http://54.65.98.221:8000/api/charts</url>
+                            <url>http://13.231.124.138:8000/api/charts</url>
                             <username>debugroom</username>
                             <password>debugroom</password>
                             <type>CHARTMUSEUM</type>
