@@ -353,6 +353,163 @@ MicroK8sクラスタへのインバウンド接続が許可された開発端末
 
 - Apache Kafkaの構築
 
+KubernetesにおけるKafka Operatorである [Strimzi](https://github.com/strimzi)を使ってApache Kafkaの環境を構築する。
+Namespaceを作成し、Strimziを使ってKafkaをインストールする。
+
+kafka/namespace.yml
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kafka
+```
+
+```bash
+$ microk8s kubectl create -f namespace.yml
+namespace/kafka created
+
+$ microk8s kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-namespaced created
+customresourcedefinition.apiextensions.k8s.io/kafkamirrormakers.kafka.strimzi.io created
+customresourcedefinition.apiextensions.k8s.io/kafkaconnectors.kafka.strimzi.io created
+clusterrole.rbac.authorization.k8s.io/strimzi-kafka-broker created
+clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-global created
+customresourcedefinition.apiextensions.k8s.io/kafkatopics.kafka.strimzi.io created
+configmap/strimzi-cluster-operator created
+clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator created
+customresourcedefinition.apiextensions.k8s.io/kafkaconnects.kafka.strimzi.io created
+customresourcedefinition.apiextensions.k8s.io/kafkabridges.kafka.strimzi.io created
+rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator created
+clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-kafka-broker-delegation created
+clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-leader-election created
+deployment.apps/strimzi-cluster-operator created
+customresourcedefinition.apiextensions.k8s.io/strimzipodsets.core.strimzi.io created
+clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-kafka-client-delegation created
+customresourcedefinition.apiextensions.k8s.io/kafkausers.kafka.strimzi.io created
+customresourcedefinition.apiextensions.k8s.io/kafkas.kafka.strimzi.io created
+serviceaccount/strimzi-cluster-operator created
+rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-entity-operator-delegation created
+rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-watched created
+customresourcedefinition.apiextensions.k8s.io/kafkarebalances.kafka.strimzi.io created
+customresourcedefinition.apiextensions.k8s.io/kafkanodepools.kafka.strimzi.io created
+clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-watched created
+clusterrole.rbac.authorization.k8s.io/strimzi-kafka-client created
+clusterrole.rbac.authorization.k8s.io/strimzi-entity-operator created
+rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-leader-election created
+customresourcedefinition.apiextensions.k8s.io/kafkamirrormaker2s.kafka.strimzi.io created
+
+$ microk8s kubectl get all -n kafka
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/strimzi-cluster-operator-6948497896-4wfdj   1/1     Running   0          22m
+
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/strimzi-cluster-operator   1/1     1            1           22m
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/strimzi-cluster-operator-6948497896   1         1         1       22m
+```
+
+続いて、Operatorを経由して、PartitionやTopicを構成する。以下のようなマニュフェストファイルを構成し、実行する。
+See : https://strimzi.io/docs/operators/latest/deploying
+
+kafka/kafka.yml
+
+**NOTE:** kafkaのバージョンやプロトコルバージョンは最新ドキュメントのものと同期をとること。
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: sample-cluster
+spec:
+  kafka:
+    version: 3.7.1
+    replicas: 1
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    config:
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
+      transaction.state.log.min.isr: 1
+      default.replication.factor: 1
+      min.insync.replicas: 1
+      inter.broker.protocol.version: "3.7"
+    storage:
+      type: jbod
+      volumes:
+        - id: 0
+          type: persistent-claim
+          size: 10Gi
+          deleteClaim: false
+  zookeeper:
+    replicas: 1
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: sample-topic
+  labels:
+    strimzi.io/cluster: sample-cluster
+spec:
+  partitions: 3
+  replicas: 1
+```
+
+
+```bash
+$ microk8s kubectl apply -f kafka.yml -n kafka
+kafka.kafka.strimzi.io/sample-cluster created
+kafkatopic.kafka.strimzi.io/sample-topic created
+
+$ microk8s kubectl get all -n kafka
+NAME                                                  READY   STATUS    RESTARTS   AGE
+pod/sample-cluster-entity-operator-69b96944b6-54dxn   2/2     Running   0          10m
+pod/sample-cluster-kafka-0                            1/1     Running   0          11m
+pod/sample-cluster-zookeeper-0                        1/1     Running   0          11m
+pod/strimzi-cluster-operator-6948497896-4wfdj         1/1     Running   0          14h
+
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                        AGE
+service/sample-cluster-kafka-bootstrap    ClusterIP   10.152.183.179   <none>        9091/TCP,9092/TCP,9093/TCP                     11m
+service/sample-cluster-kafka-brokers      ClusterIP   None             <none>        9090/TCP,9091/TCP,8443/TCP,9092/TCP,9093/TCP   11m
+service/sample-cluster-zookeeper-client   ClusterIP   10.152.183.55    <none>        2181/TCP                                       11m
+service/sample-cluster-zookeeper-nodes    ClusterIP   None             <none>        2181/TCP,2888/TCP,3888/TCP                     11m
+
+NAME                                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/sample-cluster-entity-operator   1/1     1            1           10m
+deployment.apps/strimzi-cluster-operator         1/1     1            1           14h
+
+NAME                                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/sample-cluster-entity-operator-69b96944b6   1         1         1       10m
+replicaset.apps/strimzi-cluster-operator-6948497896         1         1         1       14h
+```
+
+テストメッセージをProducerコンソールスクリプトを使って送信し、Consumerコンソールスクリプトで受信する。
+
+```bash
+$ microk8s kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.42.0-kafka-3.7.1 --rm=true --restart=Never-- bin/kafka-console-producer.sh --broker-list sample-cluster-kafka-bootstrap:9092 --topic sample-topic
+If you don't see a command prompt, try pressing enter.
+>test
+
+$ $ microk8s kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.42.0-kafka-3.7.1 --rm=true --restart=Never-- bin/kafka-console-consumer.sh --bootstrap-server sample-cluster-kafka-bootstrap:9092 --topic sample-topic --from-beginning
+If you don't see a command prompt, try pressing enter.
+test
+```
+
+
 ----
 [index]
 
