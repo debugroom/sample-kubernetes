@@ -1,0 +1,155 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: CloudFormation template with YAML - This EC2 instance Depends on vpc-cfn.yml, sg-cfn.yml, ng-cfn.yml
+
+Parameters:
+  VPCName:
+    Description: Target VPC Stack Name
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: ^[a-zA-Z][-a-zA-Z0-9]*$
+    Default: sample-microk8s-vpc
+  EC2AMI:
+    Description: AMI ID
+    #    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    #    Default: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
+    #     Default: ami-0fe22bffdec36361c
+    Type: String
+    #   Red Hat Enterprise Linux 9(HVM), SSD Volume Type
+    #   See https://docs.redhat.com/ja/documentation/red_hat_openshift_local/2.2/html-single/getting_started_guide/index#minimum-system-requirements-hardware_gsg:
+    Default: ami-04d3ba818c434b384
+  EnvType:
+    Description: Which environments to deploy your service.
+    Type: String
+    AllowedValues:
+      - Local
+      - Dev
+      - Staging
+      - Production
+    Default: Dev
+
+Mappings:
+  EC2DefinitionMap:
+    Production:
+      "InstanceType" : "r6a.xlarge"
+      "DesiredCapacity" : 1
+      "EC2InstanceMaxSize" : 1
+      "KeyPairName" : "test"
+    Staging:
+      "InstanceType": "r6a.xlarge"
+      "DesiredCapacity": 1
+      "EC2InstanceMaxSize" : 1
+      "KeyPairName": "test"
+    Dev:
+      "InstanceType": "r6a.xlarge"
+      "DesiredCapacity": 1
+      "EC2InstanceMaxSize" : 1
+      "KeyPairName": "test"
+    # See https://docs.redhat.com/ja/documentation/red_hat_openshift_local/2.2/html-single/getting_started_guide/index#minimum-system-requirements-hardware_gsg:
+    Local:
+      "InstanceType": "r6a.xlarge"
+      "DesiredCapacity": 1
+      "EC2InstanceMaxSize" : 1
+      "KeyPairName": "test"
+
+Resources:
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  IamInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+
+  # See : https://github.com/aws-cloudformation/aws-cloudformation-templates/blob/main/Solutions/OperatingSystems/RHEL9_cfn-hup.yaml
+  EC2Instance:
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: "PT10M"
+    Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          full_install:
+            - install_and_enable_cfn_hup
+        install_and_enable_cfn_hup:
+          files:
+            /etc/cfn/cfn-hup.conf:
+              content: !Sub |
+                [main]
+                stack=${AWS::StackId}
+                region=${AWS::Region}
+              mode: "000400"
+              owner: root
+              group: root
+            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.EC2Instance.Metadata.AWS::CloudFormation::Init
+                action=/usr/local/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2Instance --configsets full_install --region ${AWS::Region}
+                runas=root
+            /lib/systemd/system/cfn-hup.service:
+              content: |
+                [Unit]
+                Description=cfn-hup daemon
+
+                [Service]
+                Type=simple
+                ExecStart=/usr/local/bin/cfn-hup
+                Restart=always
+
+                [Install]
+                WantedBy=multi-user.target
+          commands:
+            01enable_cfn_hup:
+              command: systemctl enable cfn-hup.service
+            02start_cfn_hup:
+              command: systemctl start cfn-hup.service
+    Properties:
+      ImageId: !Ref EC2AMI
+      InstanceType: !FindInMap [EC2DefinitionMap, !Ref EnvType, InstanceType]
+      IamInstanceProfile: !Ref IamInstanceProfile
+      KeyName: !FindInMap [EC2DefinitionMap, !Ref EnvType, KeyPairName]
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeType: gp2
+            VolumeSize: 200
+            DeleteOnTermination: true
+            Encrypted: false
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          GroupSet:
+            - Fn::ImportValue: !Sub ${VPCName}-SecurityGroupEC2
+          SubnetId:
+            Fn::ImportValue: !Sub ${VPCName}-PublicSubnet1
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+          sudo dnf install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          sudo dnf upgrade -y
+          sudo yum update -y
+          sudo yum -y install python3-pip snapd
+          sudo systemctl enable --now snapd.socket
+          sudo ln -s /var/lib/snapd/snap /snap
+          sudo pip3 install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz
+          /usr/local/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2Instance --configsets full_install --region ${AWS::Region}
+          /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2Instance --region ${AWS::Region}
+
