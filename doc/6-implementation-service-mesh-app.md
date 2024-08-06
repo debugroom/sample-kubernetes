@@ -5,12 +5,530 @@
 
 - フロントサブネット アプリケーションの実装
 - バックエンドサブネット マイクロサービス(同期呼び出し)の実装
-- バックエンドサブネット マイクロサービス(非同期呼び出し)の実装
 
 | 動作対象 | バージョン |
 | ---- | ---- |
 | Java | 11 |
 | Spring Boot | 2.5.4 |
+
+- バックエンドサブネット マイクロサービス(非同期呼び出し)の実装
+
+| 動作対象 | バージョン |
+| ---- | ---- |
+| Java | 21 |
+| Spring Boot | 3.3.2 |
+| Spring Cloud Stream | 4.1.3 |
+
+-- pom.xml
+
+Spring Cloud Streamを使って、Kafkaからのメッセージを受信するアプリケーションを実装する。以下のライブラリのDependencyを設定する。
+See ; https://docs.spring.io/spring-cloud-stream/reference/index.html
+
+1. spring-cloud-stream
+1. spring-cloud-starter-stream-kafka
+1. springfox-boot-starter
+
+なお、Kubenetes向けコンテナイメージの作成には、[jKube](https://eclipse.dev/jkube/docs/kubernetes-maven-plugin/)を利用する。kubernetes-maven-pluginのHELM Repositoryには、
+[「Set up MicroK8s」で記載したChartmuseum](2-set-up-microk8s.md) のIPアドレスを設定すること。
+
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>org.debugroom</groupId>
+    <artifactId>service-mesh-app-service3</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>service-mesh-app-service3</name>
+    <description>Demo project for Spring Boot</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-binder</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+```
+
+-- 起動・設定クラス
+
+SpringBoot起動・設定クラスとして以下を作成する。
+
+1. org.debugroom.sample.kubernetes.servicemesh.config.App.java
+1. org.debugroom.sample.kubernetes.servicemesh.config.ConsumerConfig.java
+
+Appでは、アプリケーションの起動処理を実行する。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class App {
+
+    public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
+    }
+
+}
+```
+
+ConsumerConfigでは、Kafkaから取得したメッセージをハンドリングするConsumerクラスを登録する。単にメッセージをログ出力するだけなので、
+java.util.function.Consumerインターフェースを持つログ実装の簡易クラスをBean登録する。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.function.Consumer;
+
+@Slf4j
+@Configuration
+public class ConsumerConfig {
+
+    @Bean
+    Consumer<String> sampleConsumer(){
+        return log::info;
+    }
+
+}
+
+```
+
+設定ファイルでConsumerクラスを設定する。
+See : https://docs.spring.io/spring-cloud-stream/reference/kafka/kafka-binder/config-options.html
+
+**NOTE:** 開発端末で実行するローカル環境と、Kafkaが構築されているMicroK8s環境で、プロファイルを環境変数およびapplication-xxx.ymlで切り替えて有効化する。
+
+デフォルト(共通)：application.yml
+
+```yaml
+spring:
+  profiles:
+    active: local
+  cloud:
+    stream:
+      function:
+        definition: sampleConsumer
+```
+
+プロファイル local : application-local.ymlでは、Kafkaブローカーが動いているMicrok8sクラスタのロードバランサーを指定する。
+また、メッセージを取得するトピックの定義を記載する。
+
+```yaml
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers:
+            - XXX.XXX.XXX.XXX:9094
+          auto-create-topics: false
+      bindings:
+        sampleConsumer-in-0:
+          destination: sample-topic
+      instance-count: 1
+```
+
+**NOTE:** 開発端末からKafkaが実行されているMicroK8sクラスタに接続するために、AWSのセキュリティグループの設定とクラスタのポートフォワード設定を行っておく。EC2インスタンスのインバウンドルールで、開発端末から9042番のアクセスを許可しておくこと(セキュリティ上、IaCコードには書かずAWSコンソール上から下記の設定する)。
+
+```yaml
+SecurityGroupIngressEC2:
+  Type: AWS::EC2::SecurityGroupIngress
+  Properties:
+    GroupId: !Ref SecurityGroupEC2
+    IpProtocol: tcp
+    FromPort: 9042
+    ToPort: 9042
+    CidrIp: XXX.XXX.XXX.XXX/32
+```
+
+また、MicroK8sクラスタ内に構築されたKafkaのBrokerのロードバランサーにポートフォワードする。
+
+```bash
+microk8s kubectl port-forward -n kafka service/sample-cluster-kafka-external-bootstrap 9094:9094 --address 0.0.0.0 &
+```
+-- 動作確認
+
+開発端末で実装したApp起動クラスを実行する。
+
+```bash
+$ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------< org.debugroom:service-mesh-app-service3 >---------------
+[INFO] Building service-mesh-app-service3 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] >>> spring-boot:3.3.2:run (default-cli) > test-compile @ service-mesh-app-service3 >>>
+[INFO]
+[INFO] --- resources:3.3.1:resources (default-resources) @ service-mesh-app-service3 ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO]
+[INFO] --- compiler:3.13.0:compile (default-compile) @ service-mesh-app-service3 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ service-mesh-app-service3 ---
+[INFO] skip non existing resourceDirectory /home/kohei.kawabata/repos/debugroom/sample-kubernetes/service-mesh-app/service3/src/test/resources
+[INFO]
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ service-mesh-app-service3 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] <<< spring-boot:3.3.2:run (default-cli) < test-compile @ service-mesh-app-service3 <<<
+[INFO]
+[INFO]
+[INFO] --- spring-boot:3.3.2:run (default-cli) @ service-mesh-app-service3 ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.2)
+
+2024-08-06T16:30:34.032+09:00  INFO 30950 --- [           main] o.d.s.kubernetes.servicemesh.config.App  : Starting App using Java 21.0.3 with PID 30950 (/home/kohei.kawabata/repos/debugroom/sample-kubernetes/service-mesh-app/service3/target/classes started by DEBUGROOM\kohei.kawabata in /home/kohei.kawabata/repos/debugroom/sample-kubernetes/service-mesh-app/service3)
+2024-08-06T16:30:34.035+09:00  INFO 30950 --- [           main] o.d.s.kubernetes.servicemesh.config.App  : The following 1 profile is active: "local"
+2024-08-06T16:30:34.564+09:00  INFO 30950 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2024-08-06T16:30:34.574+09:00  INFO 30950 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2024-08-06T16:30:35.480+09:00  INFO 30950 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel 'application.sampleConsumer-in-0' has 1 subscriber(s).
+2024-08-06T16:30:35.558+09:00  INFO 30950 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2024-08-06T16:30:35.558+09:00  INFO 30950 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel 'application.errorChannel' has 1 subscriber(s).
+2024-08-06T16:30:35.559+09:00  INFO 30950 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean '_org.springframework.integration.errorLogger'
+2024-08-06T16:30:35.559+09:00  INFO 30950 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: kafka
+2024-08-06T16:30:35.559+09:00  INFO 30950 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Constructing binder child context for kafka
+2024-08-06T16:30:35.658+09:00  INFO 30950 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: kafka
+2024-08-06T16:30:35.682+09:00  INFO 30950 --- [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values:
+        allow.auto.create.topics = true
+        auto.commit.interval.ms = 100
+        auto.include.jmx.reporter = true
+        auto.offset.reset = latest
+        bootstrap.servers = [XXX.XXX.XXX.XXX:9094]
+        check.crcs = true
+        client.dns.lookup = use_all_dns_ips
+        client.id = consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-1
+        client.rack =
+        connections.max.idle.ms = 540000
+        default.api.timeout.ms = 60000
+        enable.auto.commit = false
+        enable.metrics.push = true
+        exclude.internal.topics = true
+        fetch.max.bytes = 52428800
+        fetch.max.wait.ms = 500
+        fetch.min.bytes = 1
+        group.id = anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9
+        group.instance.id = null
+        group.protocol = classic
+        group.remote.assignor = null
+        heartbeat.interval.ms = 3000
+        interceptor.classes = []
+        internal.leave.group.on.close = true
+        internal.throw.on.fetch.stable.offset.unsupported = false
+        isolation.level = read_uncommitted
+        key.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+        max.partition.fetch.bytes = 1048576
+        max.poll.interval.ms = 300000
+        max.poll.records = 500
+        metadata.max.age.ms = 300000
+        metric.reporters = []
+        metrics.num.samples = 2
+        metrics.recording.level = INFO
+        metrics.sample.window.ms = 30000
+        partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+        receive.buffer.bytes = 65536
+        reconnect.backoff.max.ms = 1000
+        reconnect.backoff.ms = 50
+        request.timeout.ms = 30000
+        retry.backoff.max.ms = 1000
+        retry.backoff.ms = 100
+        sasl.client.callback.handler.class = null
+        sasl.jaas.config = null
+        sasl.kerberos.kinit.cmd = /usr/bin/kinit
+        sasl.kerberos.min.time.before.relogin = 60000
+        sasl.kerberos.service.name = null
+        sasl.kerberos.ticket.renew.jitter = 0.05
+        sasl.kerberos.ticket.renew.window.factor = 0.8
+        sasl.login.callback.handler.class = null
+        sasl.login.class = null
+        sasl.login.connect.timeout.ms = null
+        sasl.login.read.timeout.ms = null
+        sasl.login.refresh.buffer.seconds = 300
+        sasl.login.refresh.min.period.seconds = 60
+        sasl.login.refresh.window.factor = 0.8
+        sasl.login.refresh.window.jitter = 0.05
+        sasl.login.retry.backoff.max.ms = 10000
+        sasl.login.retry.backoff.ms = 100
+        sasl.mechanism = GSSAPI
+        sasl.oauthbearer.clock.skew.seconds = 30
+        sasl.oauthbearer.expected.audience = null
+        sasl.oauthbearer.expected.issuer = null
+        sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+        sasl.oauthbearer.jwks.endpoint.url = null
+        sasl.oauthbearer.scope.claim.name = scope
+        sasl.oauthbearer.sub.claim.name = sub
+        sasl.oauthbearer.token.endpoint.url = null
+        security.protocol = PLAINTEXT
+        security.providers = null
+        send.buffer.bytes = 131072
+        session.timeout.ms = 45000
+        socket.connection.setup.timeout.max.ms = 30000
+        socket.connection.setup.timeout.ms = 10000
+        ssl.cipher.suites = null
+        ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+        ssl.endpoint.identification.algorithm = https
+        ssl.engine.factory.class = null
+        ssl.key.password = null
+        ssl.keymanager.algorithm = SunX509
+        ssl.keystore.certificate.chain = null
+        ssl.keystore.key = null
+        ssl.keystore.location = null
+        ssl.keystore.password = null
+        ssl.keystore.type = JKS
+        ssl.protocol = TLSv1.3
+        ssl.provider = null
+        ssl.secure.random.implementation = null
+        ssl.trustmanager.algorithm = PKIX
+        ssl.truststore.certificates = null
+        ssl.truststore.location = null
+        ssl.truststore.password = null
+        ssl.truststore.type = JKS
+        value.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2024-08-06T16:30:35.725+09:00  INFO 30950 --- [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2024-08-06T16:30:35.893+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-08-06T16:30:35.895+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-08-06T16:30:35.895+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1722929435892
+2024-08-06T16:30:36.266+09:00  INFO 30950 --- [           main] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-1, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Cluster ID: Tduov6wpTfOVoUdF9bwyxQ
+2024-08-06T16:30:36.271+09:00  INFO 30950 --- [           main] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-1, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Resetting generation and member id due to: consumer pro-actively leaving the group
+2024-08-06T16:30:36.271+09:00  INFO 30950 --- [           main] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-1, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Request joining group due to: consumer pro-actively leaving the group
+2024-08-06T16:30:36.276+09:00  INFO 30950 --- [           main] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-08-06T16:30:36.277+09:00  INFO 30950 --- [           main] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-08-06T16:30:36.277+09:00  INFO 30950 --- [           main] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2024-08-06T16:30:36.277+09:00  INFO 30950 --- [           main] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-08-06T16:30:36.285+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : App info kafka.consumer for consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-1 unregistered
+2024-08-06T16:30:36.320+09:00  INFO 30950 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'kafka-1773373551.sampleConsumer-in-0.errors' has 1 subscriber(s).
+2024-08-06T16:30:36.321+09:00  INFO 30950 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'kafka-1773373551.sampleConsumer-in-0.errors' has 0 subscriber(s).
+2024-08-06T16:30:36.321+09:00  INFO 30950 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'kafka-1773373551.sampleConsumer-in-0.errors' has 1 subscriber(s).
+2024-08-06T16:30:36.321+09:00  INFO 30950 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'kafka-1773373551.sampleConsumer-in-0.errors' has 2 subscriber(s).
+2024-08-06T16:30:36.340+09:00  INFO 30950 --- [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values:
+        allow.auto.create.topics = true
+        auto.commit.interval.ms = 100
+        auto.include.jmx.reporter = true
+        auto.offset.reset = latest
+        bootstrap.servers = [XXX.XXX.XXX.XXX:9094]
+        check.crcs = true
+        client.dns.lookup = use_all_dns_ips
+        client.id = consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2
+        client.rack =
+        connections.max.idle.ms = 540000
+        default.api.timeout.ms = 60000
+        enable.auto.commit = false
+        enable.metrics.push = true
+        exclude.internal.topics = true
+        fetch.max.bytes = 52428800
+        fetch.max.wait.ms = 500
+        fetch.min.bytes = 1
+        group.id = anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9
+        group.instance.id = null
+        group.protocol = classic
+        group.remote.assignor = null
+        heartbeat.interval.ms = 3000
+        interceptor.classes = []
+        internal.leave.group.on.close = true
+        internal.throw.on.fetch.stable.offset.unsupported = false
+        isolation.level = read_uncommitted
+        key.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+        max.partition.fetch.bytes = 1048576
+        max.poll.interval.ms = 300000
+        max.poll.records = 500
+        metadata.max.age.ms = 300000
+        metric.reporters = []
+        metrics.num.samples = 2
+        metrics.recording.level = INFO
+        metrics.sample.window.ms = 30000
+        partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+        receive.buffer.bytes = 65536
+        reconnect.backoff.max.ms = 1000
+        reconnect.backoff.ms = 50
+        request.timeout.ms = 30000
+        retry.backoff.max.ms = 1000
+        retry.backoff.ms = 100
+        sasl.client.callback.handler.class = null
+        sasl.jaas.config = null
+        sasl.kerberos.kinit.cmd = /usr/bin/kinit
+        sasl.kerberos.min.time.before.relogin = 60000
+        sasl.kerberos.service.name = null
+        sasl.kerberos.ticket.renew.jitter = 0.05
+        sasl.kerberos.ticket.renew.window.factor = 0.8
+        sasl.login.callback.handler.class = null
+        sasl.login.class = null
+        sasl.login.connect.timeout.ms = null
+        sasl.login.read.timeout.ms = null
+        sasl.login.refresh.buffer.seconds = 300
+        sasl.login.refresh.min.period.seconds = 60
+        sasl.login.refresh.window.factor = 0.8
+        sasl.login.refresh.window.jitter = 0.05
+        sasl.login.retry.backoff.max.ms = 10000
+        sasl.login.retry.backoff.ms = 100
+        sasl.mechanism = GSSAPI
+        sasl.oauthbearer.clock.skew.seconds = 30
+        sasl.oauthbearer.expected.audience = null
+        sasl.oauthbearer.expected.issuer = null
+        sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+        sasl.oauthbearer.jwks.endpoint.url = null
+        sasl.oauthbearer.scope.claim.name = scope
+        sasl.oauthbearer.sub.claim.name = sub
+        sasl.oauthbearer.token.endpoint.url = null
+        security.protocol = PLAINTEXT
+        security.providers = null
+        send.buffer.bytes = 131072
+        session.timeout.ms = 45000
+        socket.connection.setup.timeout.max.ms = 30000
+        socket.connection.setup.timeout.ms = 10000
+        ssl.cipher.suites = null
+        ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+        ssl.endpoint.identification.algorithm = https
+        ssl.engine.factory.class = null
+        ssl.key.password = null
+        ssl.keymanager.algorithm = SunX509
+        ssl.keystore.certificate.chain = null
+        ssl.keystore.key = null
+        ssl.keystore.location = null
+        ssl.keystore.password = null
+        ssl.keystore.type = JKS
+        ssl.protocol = TLSv1.3
+        ssl.provider = null
+        ssl.secure.random.implementation = null
+        ssl.trustmanager.algorithm = PKIX
+        ssl.truststore.certificates = null
+        ssl.truststore.location = null
+        ssl.truststore.password = null
+        ssl.truststore.type = JKS
+        value.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2024-08-06T16:30:36.341+09:00  INFO 30950 --- [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2024-08-06T16:30:36.366+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-08-06T16:30:36.366+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-08-06T16:30:36.366+09:00  INFO 30950 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1722929436366
+2024-08-06T16:30:36.368+09:00  INFO 30950 --- [           main] o.a.k.c.c.internals.LegacyKafkaConsumer  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Subscribed to topic(s): sample-topic
+2024-08-06T16:30:36.374+09:00  INFO 30950 --- [           main] s.i.k.i.KafkaMessageDrivenChannelAdapter : started org.springframework.integration.kafka.inbound.KafkaMessageDrivenChannelAdapter@c5e69a5
+2024-08-06T16:30:36.383+09:00  INFO 30950 --- [           main] o.d.s.kubernetes.servicemesh.config.App  : Started App in 2.964 seconds (process running for 3.303)
+2024-08-06T16:30:36.389+09:00  INFO 30950 --- [container-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Cluster ID: Tduov6wpTfOVoUdF9bwyxQ
+2024-08-06T16:30:36.390+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Discovered group coordinator XXX.XXX.XXX.XXX:9094 (id: 2147483647 rack: null)
+2024-08-06T16:30:36.392+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] (Re-)joining group
+2024-08-06T16:30:36.411+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Request joining group due to: need to re-join with the given member-id: consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2-b0918e48-7ef1-4263-9889-4e82ba5d2763
+2024-08-06T16:30:36.412+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] (Re-)joining group
+2024-08-06T16:30:39.417+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Successfully joined group with generation Generation{generationId=1, memberId='consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2-b0918e48-7ef1-4263-9889-4e82ba5d2763', protocol='range'}
+2024-08-06T16:30:39.424+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Finished assignment for group at generation 1: {consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2-b0918e48-7ef1-4263-9889-4e82ba5d2763=Assignment(partitions=[sample-topic-0])}
+2024-08-06T16:30:39.433+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Successfully synced group in generation Generation{generationId=1, memberId='consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2-b0918e48-7ef1-4263-9889-4e82ba5d2763', protocol='range'}
+2024-08-06T16:30:39.434+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Notifying assignor about the new Assignment(partitions=[sample-topic-0])
+2024-08-06T16:30:39.436+09:00  INFO 30950 --- [container-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Adding newly assigned partitions: sample-topic-0
+2024-08-06T16:30:39.444+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Found no committed offset for partition sample-topic-0
+2024-08-06T16:30:39.450+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Found no committed offset for partition sample-topic-0
+2024-08-06T16:30:39.466+09:00  INFO 30950 --- [container-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9-2, groupId=anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9] Resetting offset for partition sample-topic-0 to position FetchPosition{offset=7, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[XXX.XXX.XXX.XXX:9094 (id: 0 rack: null)], epoch=0}}.
+2024-08-06T16:30:39.477+09:00  INFO 30950 --- [container-0-C-1] o.s.c.s.b.k.KafkaMessageChannelBinder$2  : anonymous.9970e654-e9f3-49c8-9d1e-14326b9748a9: partitions assigned: [sample-topic-0]
+
+```
+
+MicroK8sクラスタでProducerスクリプトからメッセージを送信し、アプリケーションのログに出力されるか確認する。
+
+```bash
+$ microk8s kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.42.0-kafka-3.7.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list sample-cluster-kafka-bootstrap:9092 --topic sample-topic
+If you don't see a command prompt, try pressing enter.
+>test-message
+```
+
+アプリケーションを起動したコンソールに送信したメッセージが表示される。
+
+```
+2024-08-06T16:38:07.548+09:00  INFO 30950 --- [container-0-C-1] o.d.s.k.s.config.ConsumerConfig          : test-message
+```
+
 
 <!--
 -- pom.xml
