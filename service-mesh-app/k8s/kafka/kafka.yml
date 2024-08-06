@@ -20,11 +20,10 @@ spec:
         type: loadbalancer
         tls: false
         configuration:
-          bootstrap:
-            externalIPs: 13.231.124.138
           brokers:
             - broker: 0
-              externalIPs: 13.231.124.138
+              advertisedHost: 13.231.124.138
+              advertisedPort: 9094
     config:
       offsets.topic.replication.factor: 1
       transaction.state.log.replication.factor: 1

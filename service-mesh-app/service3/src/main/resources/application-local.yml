@@ -4,7 +4,7 @@ spring:
       kafka:
         binder:
           brokers:
-            - localhost
+            - 13.231.124.138:9094
           auto-create-topics: false
       bindings:
         sampleConsumer-in-0:
