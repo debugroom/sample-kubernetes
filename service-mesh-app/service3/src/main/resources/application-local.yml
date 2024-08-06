@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers:
+            - localhost
+          auto-create-topics: false
+      bindings:
+        sampleConsumer-in-0:
+          destination: sample-topic
+      instance-count: 1
