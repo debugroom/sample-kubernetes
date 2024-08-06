@@ -17,7 +17,7 @@ public class LocalConfig {
     @Bean
     public WebClient service2WebClient() {
         return WebClient.builder()
-                .baseUrl(serviceProperties.getService2().dns)
+                .baseUrl(serviceProperties.getService2().url)
                 .build();
 
     }

@@ -1,9 +1,7 @@
 package org.debugroom.sample.kubernetes.servicemesh.config;
 
 import io.kubernetes.client.openapi.ApiClient;
-import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1LoadBalancerIngress;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.ClientBuilder;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Slf4j
-@Profile("staging")
+@Profile("dev")
 @Configuration
-public class StagingConfig {
+public class DevConfig {
 
     @Bean
     public WebClient service2WebClient() throws Exception{
@@ -26,9 +24,10 @@ public class StagingConfig {
         ApiClient apiClient = ClientBuilder.standard().build();
         CoreV1Api coreV1Api = new CoreV1Api(apiClient);
         List<V1Service> serviceList =
-            coreV1Api.listServiceForAllNamespaces(
-                    null, null,null, null, null, null, null, null, null, null
-            ).getItems();
+                coreV1Api.listServiceForAllNamespaces().execute().getItems();
+//            coreV1Api.listServiceForAllNamespaces(
+//                    null, null,null, null, null, null, null, null, null, null
+//            ).getItems();
         log.info("These are servicelist --------------------");
         log.info(serviceList.toString());
         return WebClient.builder()

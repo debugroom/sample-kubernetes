@@ -2,4 +2,18 @@ server:
   port: 8081
 service:
   service2:
-    dns: http://localhost:8082
+    url: http://localhost:8082
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers:
+            - 13.231.124.138:9094
+          auto-create-topics: false
+      binders:
+        output:
+          destination: sample-topic
+          content-type: application/json
+          producer:
+            partition-count: 1

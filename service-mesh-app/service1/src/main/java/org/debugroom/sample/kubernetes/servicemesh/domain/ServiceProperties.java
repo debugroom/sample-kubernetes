@@ -20,7 +20,7 @@ public class ServiceProperties {
     @NoArgsConstructor
     @Data
     public static class Service2 {
-        public String dns;
+        public String url;
     }
 
 }

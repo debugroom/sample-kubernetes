@@ -1,3 +1,0 @@
-service:
-  service2:
-    dns: "" #This property is set by Prod configuration class.

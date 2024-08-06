@@ -1,0 +1,17 @@
+service:
+  service2:
+    url: "" #This property is set by Dev configuration class.
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers:
+            - sample-cluster-kafka-bootstrap
+          auto-create-topics: false
+      binders:
+        output:
+          destination: sample-topic
+          content-type: application/json
+          producer:
+            partition-count: 1
