@@ -349,8 +349,6 @@ MicroK8sクラスタへのインバウンド接続が許可された開発端末
 
 **NOTE:** アプリクライアントのクレデンシャルをAP実装時に取得する。
 
-**TODO:**
-
 - Apache Kafkaの構築
 
 KubernetesにおけるKafka Operatorである [Strimzi](https://github.com/strimzi)を使ってApache Kafkaの環境を構築する。
@@ -416,6 +414,8 @@ kafka/kafka.yml
 
 **NOTE:** kafkaのバージョンやプロトコルバージョンは最新ドキュメントのものと同期をとること。
 
+**NOTE:** AdvertiseHostには、クラスタのパブリックIPを指定する。Kubernetesクラスタ外のアプリケーションからアクセスする際に利用する。
+
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
@@ -434,6 +434,15 @@ spec:
         port: 9093
         type: internal
         tls: true
+      - name: external
+        port: 9094
+        type: loadbalancer
+        tls: false
+        configuration:
+          brokers:
+            - broker: 0
+              advertisedHost: XXX.XXX.XXX.XXX
+              advertisedPort: 9094
     config:
       offsets.topic.replication.factor: 1
       transaction.state.log.replication.factor: 1
@@ -476,25 +485,27 @@ kafka.kafka.strimzi.io/sample-cluster created
 kafkatopic.kafka.strimzi.io/sample-topic created
 
 $ microk8s kubectl get all -n kafka
-NAME                                                  READY   STATUS    RESTARTS   AGE
-pod/sample-cluster-entity-operator-69b96944b6-54dxn   2/2     Running   0          10m
-pod/sample-cluster-kafka-0                            1/1     Running   0          11m
-pod/sample-cluster-zookeeper-0                        1/1     Running   0          11m
-pod/strimzi-cluster-operator-6948497896-4wfdj         1/1     Running   0          14h
+NAME                                                 READY   STATUS    RESTARTS   AGE
+pod/sample-cluster-entity-operator-dbdbbcb78-46ss8   2/2     Running   0          15m
+pod/sample-cluster-kafka-0                           1/1     Running   0          15m
+pod/sample-cluster-zookeeper-0                       1/1     Running   0          16m
+pod/strimzi-cluster-operator-6948497896-4wfdj        1/1     Running   0          6d23h
 
-NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                        AGE
-service/sample-cluster-kafka-bootstrap    ClusterIP   10.152.183.179   <none>        9091/TCP,9092/TCP,9093/TCP                     11m
-service/sample-cluster-kafka-brokers      ClusterIP   None             <none>        9090/TCP,9091/TCP,8443/TCP,9092/TCP,9093/TCP   11m
-service/sample-cluster-zookeeper-client   ClusterIP   10.152.183.55    <none>        2181/TCP                                       11m
-service/sample-cluster-zookeeper-nodes    ClusterIP   None             <none>        2181/TCP,2888/TCP,3888/TCP                     11m
+NAME                                              TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                                        AGE
+service/sample-cluster-kafka-0                    LoadBalancer   10.152.183.95    192.168.1.2   9094:31141/TCP                                 15m
+service/sample-cluster-kafka-bootstrap            ClusterIP      10.152.183.165   <none>        9091/TCP,9092/TCP,9093/TCP                     15m
+service/sample-cluster-kafka-brokers              ClusterIP      None             <none>        9090/TCP,9091/TCP,8443/TCP,9092/TCP,9093/TCP   15m
+service/sample-cluster-kafka-external-bootstrap   LoadBalancer   10.152.183.70    192.168.1.1   9094:30113/TCP                                 15m
+service/sample-cluster-zookeeper-client           ClusterIP      10.152.183.45    <none>        2181/TCP                                       16m
+service/sample-cluster-zookeeper-nodes            ClusterIP      None             <none>        2181/TCP,2888/TCP,3888/TCP                     16m
 
 NAME                                             READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/sample-cluster-entity-operator   1/1     1            1           10m
-deployment.apps/strimzi-cluster-operator         1/1     1            1           14h
+deployment.apps/sample-cluster-entity-operator   1/1     1            1           15m
+deployment.apps/strimzi-cluster-operator         1/1     1            1           6d23h
 
-NAME                                                        DESIRED   CURRENT   READY   AGE
-replicaset.apps/sample-cluster-entity-operator-69b96944b6   1         1         1       10m
-replicaset.apps/strimzi-cluster-operator-6948497896         1         1         1       14h
+NAME                                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/sample-cluster-entity-operator-dbdbbcb78   1         1         1       15m
+replicaset.apps/strimzi-cluster-operator-6948497896        1         1         1       6d23h
 ```
 
 テストメッセージをProducerコンソールスクリプトを使って送信し、Consumerコンソールスクリプトで受信する。
