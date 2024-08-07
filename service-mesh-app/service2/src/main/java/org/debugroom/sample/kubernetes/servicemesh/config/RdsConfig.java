@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.debugroom.sample.kubernetes.servicemesh.domain.CloudFormationStackResolver;
+import org.springframework.context.annotation.Profile;
 
+@Profile("aws")
 @Configuration
 public class RdsConfig {
 

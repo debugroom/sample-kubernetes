@@ -1,18 +1,3 @@
 spring:
   profiles:
     active: local
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath*:schema-postgresql.sql
-      data-locations: classpath*:data-postgresql.sql
-#cloud:
-#  aws:
-#    stack:
-#      auto: false
-#    credentials:
-#      instanceProfile: false
-#      profileName:
-#    region:
-#      auto: false
-#      static: ap-northeast-1

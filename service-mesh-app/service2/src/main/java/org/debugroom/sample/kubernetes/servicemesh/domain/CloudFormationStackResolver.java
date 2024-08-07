@@ -7,12 +7,14 @@ import com.amazonaws.services.cloudformation.model.ListExportsResult;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Profile("aws")
 @Component
 public class CloudFormationStackResolver implements InitializingBean {
 
