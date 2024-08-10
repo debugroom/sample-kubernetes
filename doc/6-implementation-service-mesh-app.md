@@ -3,6 +3,8 @@
 
 - バックエンドサブネット 同期呼び出しされるマイクロサービス(2)の実装
 
+![Webアプリケーション](image/6_0_service2_scope.png)
+
 | 動作対象 | バージョン |
 | ---- | ---- |
 | Java | 21 |
@@ -615,6 +617,8 @@ $ curl http://localhost:8082/service2/users/0
 ```
 
 - バックエンドサブネット 同期呼び出し・非同期Producer型マイクロサービス(1)の実装
+
+![Webアプリケーション](image/6_1_service1_scope.png)
 
 | 動作対象 | バージョン |
 | ---- | ---- |
@@ -1256,6 +1260,10 @@ $ curl http://localhost:8081/service1/sample
 
 - バックエンドサブネット 非同期Consumer型マイクロサービス(3)の実装
 
+
+![Webアプリケーション](image/6_2_service3_scope.png)
+
+
 | 動作対象 | バージョン |
 | ---- | ---- |
 | Java | 21 |
@@ -1774,6 +1782,8 @@ $ curl -X POST  http://localhost:8081/service1/sample?message=MessageFromService
 - フロントサブネット アプリケーションの実装
 
 バックエンドのマイクロサービスにアクセスするフロントのWebアプリケーションを実装する。認証はMicroK8s上に構築したOIDCプロバイダ(OIDC Authorization Server)であるKeycloakのユーザを使って行い、アプリケーションにログインする。OIDC Authorization ServerからIDトークン・アクセストークン・リフレッシュトークンを取得し、バックエンドマイクロサービスの認可に使用する。
+
+![Webアプリケーション](image/6_3_webapp_scope.png)
 
 | 動作対象 | バージョン |
 | ---- | ---- |
@@ -2453,11 +2463,11 @@ microk8s kubectl port-forward -n kafka service/sample-cluster-kafka-external-boo
 
 http://localhost:8080 へブラウザからアクセスすると、KeyCloakへリダイレクトされ、ユーザ認証を求められる。[Set up Application Environment](3-set-up-app-env.md)で作成したKeyCloakのユーザをIDとパスワードを入力し、ログインする。
 
-![Webアプリケーションのログイン1](image/6_1_webapp_login.png)
+![Webアプリケーションのログイン1](image/6_4_webapp_login.png)
 
 認証が成功するとポータル画面に遷移する。
 
-![Webアプリケーションのログイン1](image/6_2_webapp_login.png)
+![Webアプリケーションのログイン1](image/6_5_webapp_login.png)
 
 Service3には、Webアプリケーションから呼び出したService1で実行された非同期呼び出しメッセージがService3で表示される。
 
