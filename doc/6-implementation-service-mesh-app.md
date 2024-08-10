@@ -1,15 +1,6 @@
 
 #### サービスメッシュ アプリケーションの実装
 
-**TODO:**
-
-- フロントサブネット アプリケーションの実装
-
-| 動作対象 | バージョン |
-| ---- | ---- |
-| Java | 11 |
-| Spring Boot | 2.5.4 |
-
 - バックエンドサブネット 同期呼び出しされるマイクロサービス(2)の実装
 
 | 動作対象 | バージョン |
@@ -1099,7 +1090,7 @@ SecurityGroupIngressEC2:
     CidrIp: XXX.XXX.XXX.XXX/32
 ```
 
-また、MicroK8sクラスタ内に構築されたKafkaのBrokerのロードバランサーにポートフォワードするようデーモンプロセスを起動しておく。
+また、MicroK8sクラスタ内に構築されたKafkaのBrokerのロードバランサーにポートフォワードするよう、デーモンプロセスを起動する。
 
 ```bash
 microk8s kubectl port-forward -n kafka service/sample-cluster-kafka-external-bootstrap 9094:9094 --address 0.0.0.0 &
@@ -1263,8 +1254,6 @@ $ curl http://localhost:8081/service1/sample
 {"text":"This is created by Service2."}
 ```
 
-なお、非同期でKafkaを呼び出す処理は、次節以降で実行する。
-
 - バックエンドサブネット 非同期Consumer型マイクロサービス(3)の実装
 
 | 動作対象 | バージョン |
@@ -1276,8 +1265,7 @@ $ curl http://localhost:8081/service1/sample
 -- pom.xml
 
 Spring Cloud Streamを使って、Kafkaからのメッセージを受信する(Consumer型)マイクロサービスアプリケーションを実装する。以下のライブラリのDependencyを設定する。
-
-See : https://docs.spring.io/spring-cloud-stream/reference/index.html
+See ; https://docs.spring.io/spring-cloud-stream/reference/index.html
 
 1. spring-cloud-stream
 1. spring-cloud-starter-stream-kafka
@@ -1475,7 +1463,7 @@ SecurityGroupIngressEC2:
     CidrIp: XXX.XXX.XXX.XXX/32
 ```
 
-また、MicroK8sクラスタ内に構築されたKafkaのBrokerのロードバランサーにポートフォワードするよう、デーモンプロセスを実行しておく。
+また、MicroK8sクラスタ内に構築されたKafkaのBrokerのロードバランサーにポートフォワードする。
 
 ```bash
 microk8s kubectl port-forward -n kafka service/sample-cluster-kafka-external-bootstrap 9094:9094 --address 0.0.0.0 &
@@ -1783,12 +1771,706 @@ $ curl -X POST  http://localhost:8081/service1/sample?message=MessageFromService
 2024-08-07T09:15:17.279+09:00  INFO 31514 --- [container-0-C-1] o.d.s.k.s.config.ConsumerConfig          : {"text":"test-message: MessageFromService1:Mon Aug 07 09:15:16 JST 1944"}
 ```
 
+- フロントサブネット アプリケーションの実装
 
-<!--
+バックエンドのマイクロサービスにアクセスするフロントのWebアプリケーションを実装する。認証はMicroK8s上に構築したOIDCプロバイダ(OIDC Authorization Server)であるKeycloakのユーザを使って行い、アプリケーションにログインする。OIDC Authorization ServerからIDトークン・アクセストークン・リフレッシュトークンを取得し、バックエンドマイクロサービスの認可に使用する。
 
-```java
+| 動作対象 | バージョン |
+| ---- | ---- |
+| Java | 21 |
+| Spring Boot Starter| 3.3.2 |
+| Spring Mvc(Starter)| 6.1.11(3.3.2) |
+| Spring Security(Starter) | 6.3.1(3.3.2) |
+| Spring oauth2 client(Starter) | 6.3.1(3.3.2) |
+| Thymeleaf extras spring security | 6.3.1(3.3.2) |
+
+-- pom.xml
+
+以下のライブラリのDependencyを設定する。
+
+1. spring-boot-starter-web
+1. spring-boot-starter-webflux
+1. spring-boot-starter-thymeleaf
+1. thymeleaf-extras-springsecurity6
+1. spring-boot-starter-security
+1. spring-boot-starter-oauth2-client
+1. spring-boot-configuration-processor
+
+なお、Kubenetes向けコンテナイメージの作成には、[jKube](https://eclipse.dev/jkube/docs/kubernetes-maven-plugin/)を利用する。kubernetes-maven-pluginのHELM Repositoryには、
+[「Set up MicroK8s」で記載したChartmuseum](2-set-up-microk8s.md) のIPアドレスを設定すること。
+
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>org.debugroom</groupId>
+    <artifactId>service-mesh-webapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>service-mesh-webapp</name>
+    <description>Demo project for Spring Boot</description>
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <configuration>
+                    <helm>
+                        <home>http://localhost:8000</home>
+                        <sources>http://localhost:8000</sources>
+                        <keywords>sample-app</keywords>
+                        <maintainers>
+                            <maintainer>
+                                <name>org.debugroom</name>
+                                <email>org.debugroom</email>
+                            </maintainer>
+                        </maintainers>
+                        <stableRepository>
+                            <name>sample-chartmuseum-snapshot-repository</name>
+                            <url>http://localhost:8000/api/charts</url>
+                            <username>debugroom</username>
+                            <password>debugroom</password>
+                            <type>CHARTMUSEUM</type>
+                        </stableRepository>
+                        <snapshotRepository>
+                            <name>sample-chartmuseum-snapshot-repository</name>
+                            <url>http://localhost:8000/api/charts</url>
+                            <username>debugroom</username>
+                            <password>debugroom</password>
+                            <type>CHARTMUSEUM</type>
+                        </snapshotRepository>
+                    </helm>
+                </configuration>
+                <version>1.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
 ```
 
+-- 起動・設定クラス
+
+SpringBoot起動・設定クラスとして以下を作成する。
+
+1. org.debugroom.sample.kubernetes.servicemesh.config.WebApp.java
+1. org.debugroom.sample.kubernetes.servicemesh.config.MvcConfig.java
+1. org.debugroom.sample.kubernetes.servicemesh.config.DomainConfig.java
+1. org.debugroom.sample.kubernetes.servicemesh.config.OAuth2LoginSecurityConfig.java
+
+WebAppでは、アプリケーションの起動処理を実行する。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class WebApp {
+
+    public static void main(String[] args) {
+        SpringApplication.run(WebApp.class, args);
+    }
+
+}
+```
+
+MvcConfigでは、Spring MVCおよび画面作成のためのリソース設定を行う。
+
+```java
+
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import org.debugroom.sample.kubernetes.servicemesh.app.web.interceptor.SetMenuInterceptor;
+
+@ComponentScan("org.debugroom.sample.kubernetes.servicemesh.app.web")
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+
+    @Bean
+    SetMenuInterceptor setMenuInterceptor(){
+        return new SetMenuInterceptor();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(setMenuInterceptor());
+    }
+
+}
+
+```
+
+DomainConfigでは、バックエンドサービスにアクセスするためのWebClientの設定や、呼び出し時のHTTPリクエストのAuthorizationヘッダにアクセストークンを設定するにあたり、フィルタ設定するためのOAuth2AuthorizedClientManagerの設定を行う。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.ServiceProperties;
+
+@ComponentScan("org.debugroom.sample.kubernetes.servicemesh.domain")
+@Configuration
+public class DomainConfig {
+
+    @Autowired
+    ServiceProperties serviceProperties;
+
+    @Bean
+    public OAuth2AuthorizedClientManager auth2AuthorizedClientManager(
+            ClientRegistrationRepository clientRegistrationRepository,
+            OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository){
+
+        OAuth2AuthorizedClientProvider auth2AuthorizedClientProvider =
+                OAuth2AuthorizedClientProviderBuilder.builder()
+                        .clientCredentials()
+                        .build();
+
+        DefaultOAuth2AuthorizedClientManager auth2AuthorizedClientManager =
+                new DefaultOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, oAuth2AuthorizedClientRepository);
+        auth2AuthorizedClientManager.setAuthorizedClientProvider(auth2AuthorizedClientProvider);
+
+        return auth2AuthorizedClientManager;
+    }
+
+    @Bean
+    public WebClient service1WebClient(OAuth2AuthorizedClientManager authorizedClientManager){
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+                new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+
+        oauth2Client.setDefaultClientRegistrationId("keycloak");
+        return WebClient.builder()
+                .baseUrl(serviceProperties.getService1().getDns())
+                .apply(oauth2Client.oauth2Configuration())
+                .build();
+    }
+
+    @Bean
+    public WebClient service2WebClient(OAuth2AuthorizedClientManager authorizedClientManager){
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+                new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+
+        oauth2Client.setDefaultClientRegistrationId("keycloak");
+        return WebClient.builder()
+                .baseUrl(serviceProperties.getService2().getDns())
+                .apply(oauth2Client.oauth2Configuration())
+                .build();
+    }
+
+}
+
+```
+
+OAuth2LoginSecurityConfigでは、初回Webアプリケーションアクセス時の認証設定、ログアウトの挙動、認証を移譲する認可コードフローの設定を行う。
+
+```java
+
+package org.debugroom.sample.kubernetes.servicemesh.config;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+@Configuration
+@EnableWebSecurity
+public class OAuth2LoginSecurityConfig{
+
+    @Autowired
+    ClientRegistrationRepository clientRegistrationRepository;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .anyRequest().authenticated())
+            .oauth2Login(withDefaults())
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler()));
+        return http.build();
+    }
+
+    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
+
+        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
+                new OidcClientInitiatedLogoutSuccessHandler(
+                        this.clientRegistrationRepository);
+        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}");
+        return oidcLogoutSuccessHandler;
+    }
+
+}
+
+```
+
+**NOTE:** Spring Security5から6への以降にかけて設定クラス作成方法が大きく異なっているので注意。
+
+See : https://github.com/spring-projects/spring-security/wiki/Spring-Security-6.0-Migration-Guide
+
+また、設定ファイルでは、OIDCプロバイダとなるKeycloakの認可コードフロー設定を行う。
+
+
+デフォルト(共通)：application.yml
+
+```yaml
+spring:
+  profiles:
+    active: local
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            userNameAttribute: preferred_username
+        registration:
+          keycloak:
+            provider: keycloak
+            scope: openid
+            client-authentication-method: client_secret_basic
+            authorizationGrantType: authorization_code
+```
+
+ローカル環境では、開発端末環境でMicroK8s上に構築したKeycloakにアクセスするためのリダイレクトURLや、各種エンドポイント、クライアントID、シークレットの設定を行う。
+
+デフォルト(共通)：application-local.yml
+
+```yaml
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            authorizationUri: http://XXX.XXX.XXX.XXX:7000/realms/master/protocol/openid-connect/auth
+            tokenUri: http://XXX.XXX.XXX.XXX:7000/realms/master/protocol/openid-connect/token
+            userInfoUri: http://XXX.XXX.XXX.XXX:7000/realms/master/protocol/openid-connect/userinfo
+            jwkSetUri: http://XXX.XXX.XXX.XXX:7000/realms/master/protocol/openid-connect/certs
+            issuer-uri: http://XXX.XXX.XXX.XXX:7000/realms/master
+        registration:
+          keycloak:
+            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            clientId: service_mesh_app_local
+            clientSecret: XXXXXXX
+service:
+  service1:
+    dns: http://localhost:8081
+  service2:
+    dns: http://localhost:8082
+```
+
+なお、クライアントIDやシークレットは[「Set up Application Environment」で記載したKeycloak](3-set-up-app-env.md) で作成したものを設定すること。
+
+-- Web層むけSpring MVC関連クラス
+
+Web層むけSpring MVC関連クラスとして以下を作成する。
+
+1. org.debugroom.sample.kubernetes.servicemesh.app.web.SampleController.java
+
+SampleControllerでは、以下のREST APIを定義し、バックエンドのマイクロサービスを呼び出すサービスクラスを実行する。
+サービスの実行結果や、IDトークンやアクセストークン、リフレッシュトークンを表示するためにViewにパラメータを渡す。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.app.web;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
+import org.debugroom.sample.kubernetes.servicemesh.domain.repository.Service1Repository;
+import org.debugroom.sample.kubernetes.servicemesh.domain.service.SampleChoreographyService;
+import org.debugroom.sample.kubernetes.servicemesh.domain.service.SampleOrchestrationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.repository.ServiceRepository;
+
+@Controller
+public class SampleController {
+
+
+    @Autowired
+    OAuth2AuthorizedClientService auth2AuthorizedClientService;
+
+    @Autowired
+    SampleOrchestrationService sampleOrchestrationService;
+
+    @Autowired
+    SampleChoreographyService sampleChoreographyService;
+
+    @GetMapping("/")
+    public String index(@AuthenticationPrincipal OidcUser oidcUser,
+                        OAuth2AuthenticationToken authenticationToken, Model model){
+        return portal(oidcUser, authenticationToken, model);
+    }
+
+    @GetMapping(value = "/portal")
+    public String portal(@AuthenticationPrincipal OidcUser oidcUser,
+                         OAuth2AuthenticationToken oAuth2AuthenticationToken,
+                         Model model){
+        OAuth2AuthorizedClient oAuth2AuthorizedClient =
+                auth2AuthorizedClientService.loadAuthorizedClient(
+                        oAuth2AuthenticationToken.getAuthorizedClientRegistrationId(),
+                        oAuth2AuthenticationToken.getName());
+        model.addAttribute("oidcUser", oidcUser);
+        model.addAttribute(oAuth2AuthorizedClient);
+        model.addAttribute("accessToken", oAuth2AuthorizedClient.getAccessToken());
+        model.addAttribute("sample1",
+                sampleOrchestrationService.execute(Sample.builder().text("sample1").build()));
+        model.addAttribute("sample2viaSample1",
+                sampleOrchestrationService.execute(Sample.builder().text("sample2viaSample1").build()));
+        model.addAttribute("sample2",
+                sampleOrchestrationService.execute(Sample.builder().text("sample2").build()));
+        sampleChoreographyService.execute(Sample.builder().text("messageFromWebApp").build());
+
+        return "portal";
+
+    }
+
+}
+```
+
+-- ドメイン層としてのServiceクラスおよびRepositoryクラス
+
+フロントのアプリケーションのサービスクラスはトランザクション境界として、バックエンドのマイクロサービスを含め、処理フローを実装する。
+ここでは、同期型でバックエンドのマイクロサービスを呼び出すSampleOrchestrationServiceと非同期でマイクロサービスを呼び出すSampleChoreographyServiceを実装する。なお、インターフェースクラスの解説は省略する。
+
+
+SampleOrchestrationServiceImplでは、引数のパラメータに応じて、バックエンドのマイクロサービスの呼び出し方を切りかえる。
+ここでは、単純にService1を同期的に呼び出す処理と、Service1を経由してService2を同期的に呼び出す処理、単純にService2を同期的に呼び出す3パターンを実装する。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.domain.service;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
+import org.debugroom.sample.kubernetes.servicemesh.domain.repository.ServiceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SampleOrchestrationServiceImpl implements SampleOrchestrationService{
+
+    @Autowired
+    @Qualifier("service1Repository")
+    ServiceRepository service1Repository;
+
+    @Autowired
+    @Qualifier("service2Repository")
+    ServiceRepository service2Repository;
+
+    @Override
+    public Sample execute(Sample sample) {
+
+        if("sample1".equals(sample.getText())){
+            return service1Repository.findTest();
+        }
+        if("sample2viaSample1".equals(sample.getText())){
+            return service1Repository.findOne();
+        }
+        return service2Repository.findOne();
+
+    }
+}
+```
+
+SampleChoreographyServiceImplでは、Service1を経由してService3を非同期的に呼び出す処理を実装する。なお、Service1からKafkaを経由してService3にメッセージ送信するかたちとする。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.domain.service;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
+import org.debugroom.sample.kubernetes.servicemesh.domain.repository.ServiceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SampleChoreographyServiceImpl implements SampleChoreographyService{
+
+    @Autowired
+    @Qualifier("service1Repository")
+    ServiceRepository service1Repository;
+
+    @Override
+    public void execute(Sample sample) {
+        service1Repository.save(sample);
+    }
+}
+```
+
+マイクロサービスService1にアクセスする処理をRepositoryクラスとして実装する。呼び出し時の例外処理などを一元化し、サービスクラスの実装を簡素化するようにWebClientを経由して呼び出すかたちで実装する。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.domain.repository;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Component
+public class Service1Repository implements ServiceRepository{
+
+    @Autowired
+    @Qualifier("service1WebClient")
+    WebClient webClient;
+
+    public Sample findOne(){
+        return webClient.get()
+                .uri("/service1/sample")
+                .retrieve()
+                .bodyToMono(Sample.class)
+                .block();
+    }
+
+    public Sample findTest(){
+        return webClient.get()
+                .uri("/service1/test")
+                .retrieve()
+                .bodyToMono(Sample.class)
+                .block();
+    }
+
+    @Override
+    public Sample save(Sample sample) {
+        return webClient.post()
+                .uri("/service1/sample?message=" + sample.getText())
+                .bodyValue(sample.getText())
+                .retrieve()
+                .bodyToMono(Sample.class)
+                .block();
+    }
+
+}
+```
+
+マイクロサービスService2にアクセスする処理をRepositoryクラスとして実装する。基本的にService1Repositoryと同様だが、Service1経由で呼び出す処理についてはダミー処理をメソッドに実装しておく。
+
+```java
+package org.debugroom.sample.kubernetes.servicemesh.domain.repository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
+
+@Component
+public class Service2Repository implements ServiceRepository{
+
+    @Autowired
+    @Qualifier("service2WebClient")
+    WebClient webClient;
+
+    @Override
+    public Sample findOne(){
+        return webClient.get()
+                .uri("/service2/sample")
+                .retrieve()
+                .bodyToMono(Sample.class)
+                .block();
+    }
+
+    @Override
+    public Sample findTest(){
+        return Sample.builder().text("test").build(); //dummy
+    }
+
+    @Override
+    public Sample save(Sample sample) {
+        return Sample.builder().text("test").build(); //dummy
+    }
+
+}
+```
+
+なお、実行した結果はThymeReafを使って表示するようにする。
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    th:replace="~{fragments/template_dafault :: layout(~{::head/content()}, ~{::body/content()})}">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/portal.css" media="(min-width: 1280px)">
+    <link rel="stylesheet" type="text/css" href="static/css/portal_mobile.css" media="(min-width: 320px) and (max-width: 767px)">
+    <link rel="stylesheet" type="text/css" href="static/css/portal_tablet.css" media="(min-width: 768px) and (max-width: 1279px)">
+    <title>Portal</title>
+</head>
+<body>
+  <div class="panel">
+      <h2>Successful Login!</h2>
+      <h3>User Information</h3>
+      User Name : <span sec:authentication="name"/>
+      <br/>
+      <h3>ID Token & User claim</h3>
+      ID Token : <span th:text="${oidcUser.getIdToken().getTokenValue()}"></span>
+      <ul>
+          <li th:each="attribute : ${oidcUser.getAttributes()}">
+             <span th:text="${attribute.key}"></span>  :  <span th:text="${attribute.value}"></span>
+          </li>
+      </ul>
+      <br/>
+      <h3>Access Token & Refresh Token</h3>
+      Access Token : <span th:text="${accessToken.getTokenValue()}"></span><br/><br/>
+      Issued At : <span th:text="${accessToken.getIssuedAt()}"></span><br/>
+      Expired At : <span th:text="${accessToken.getExpiresAt()}"></span><br/><br/>
+      Refresh Token : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getTokenValue()}"></span><br/><br/>
+      Issued At : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getIssuedAt()}"></span><br/>
+      Expired At : <span th:text="${OAuth2AuthorizedClient.getRefreshToken().getExpiresAt()}"></span><br/>
+      <h3>Call Backend Service</h3>
+      Service1 : <span th:text="${sample1.getText()}"></span> <br>
+      Service2viaService1 : <span th:text="${sample2viaSample1.getText()}"></span> <br>
+      Service2 : <span th:text="${sample2.getText()}"></span>
+  </div>
+</body>
+</html>
+```
+
+--- 実行確認
+
+これまで実装してきたマイクロサービスを全て起動し、Webアプリケーションも合わせて起動する。なお、MicroK8sクラスタでは、ログインのためのKeycloakやKafkaアクセスのためのポートフォワードをバックグラウンドデーモンとして実行しておくこと。
+
+```bash
+$ microk8s kubectl port-forward service/keycloak-23 7000:80 --address 0.0.0.0 &
+```
+
+```bash
+microk8s kubectl port-forward -n kafka service/sample-cluster-kafka-external-bootstrap 9094:9094 --address 0.0.0.0 &
+```
+
+http://localhost:8080 へブラウザからアクセスすると、KeyCloakへリダイレクトされ、ユーザ認証を求められる。[Set up Application Environment](3-set-up-app-env.md)で作成したKeyCloakのユーザをIDとパスワードを入力し、ログインする。
+
+![Webアプリケーションのログイン1](image/6_1_webapp_login.png)
+
+認証が成功するとポータル画面に遷移する。
+
+![Webアプリケーションのログイン1](image/6_2_webapp_login.png)
+
+Service3には、Webアプリケーションから呼び出したService1で実行された非同期呼び出しメッセージがService3で表示される。
+
+```bash
+2024-08-11T07:00:31.820+09:00  INFO 28577 --- [container-0-C-1] o.d.s.k.s.config.ConsumerConfig          : {"text":"test-message: messageFromWebApp:Fri Aug 11 07:00:31 JST 1944"}
+```
+
+
+<!--
+```java
+```
+```bash
+```
 -->
 
 ----
