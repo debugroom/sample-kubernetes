@@ -1,6 +1,9 @@
 package org.debugroom.sample.kubernetes.servicemesh.app.web;
 
+import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
 import org.debugroom.sample.kubernetes.servicemesh.domain.repository.Service1Repository;
+import org.debugroom.sample.kubernetes.servicemesh.domain.service.SampleChoreographyService;
+import org.debugroom.sample.kubernetes.servicemesh.domain.service.SampleOrchestrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,12 +25,10 @@ public class SampleController {
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
 
     @Autowired
-    @Qualifier("service1Repository")
-    ServiceRepository service1Repository;
+    SampleOrchestrationService sampleOrchestrationService;
 
     @Autowired
-    @Qualifier("service2Repository")
-    ServiceRepository service2Repository;
+    SampleChoreographyService sampleChoreographyService;
 
     @GetMapping("/")
     public String index(@AuthenticationPrincipal OidcUser oidcUser,
@@ -46,9 +47,14 @@ public class SampleController {
         model.addAttribute("oidcUser", oidcUser);
         model.addAttribute(oAuth2AuthorizedClient);
         model.addAttribute("accessToken", oAuth2AuthorizedClient.getAccessToken());
-        model.addAttribute("sample1", service1Repository.findTest());
-        model.addAttribute("sample2viaSample1", service1Repository.findOne());
-        model.addAttribute("sample2", service2Repository.findOne());
+        model.addAttribute("sample1",
+                sampleOrchestrationService.execute(Sample.builder().text("sample1").build()));
+        model.addAttribute("sample2viaSample1",
+                sampleOrchestrationService.execute(Sample.builder().text("sample2viaSample1").build()));
+        model.addAttribute("sample2",
+                sampleOrchestrationService.execute(Sample.builder().text("sample2").build()));
+        sampleChoreographyService.execute(Sample.builder().text("messageFromWebApp").build());
+
         return "portal";
 
     }

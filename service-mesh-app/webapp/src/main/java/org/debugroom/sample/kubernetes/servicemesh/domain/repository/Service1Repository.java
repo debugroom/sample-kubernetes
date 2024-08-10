@@ -29,4 +29,14 @@ public class Service1Repository implements ServiceRepository{
                 .block();
     }
 
+    @Override
+    public Sample save(Sample sample) {
+        return webClient.post()
+                .uri("/service1/sample?message=" + sample.getText())
+//                .bodyValue(sample.getText())
+                .retrieve()
+                .bodyToMono(Sample.class)
+                .block();
+    }
+
 }

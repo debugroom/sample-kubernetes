@@ -8,4 +8,6 @@ public interface ServiceRepository {
 
     public Sample findTest();
 
+    public Sample save(Sample sample);
+
 }

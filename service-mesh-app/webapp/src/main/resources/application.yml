@@ -11,5 +11,6 @@ spring:
           keycloak:
             provider: keycloak
             scope: openid
-            client-authentication-method: basic
+            client-authentication-method: client_secret_basic
+#            client-authentication-method: basic
             authorizationGrantType: authorization_code

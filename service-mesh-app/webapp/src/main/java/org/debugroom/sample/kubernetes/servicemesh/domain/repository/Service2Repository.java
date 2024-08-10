@@ -28,4 +28,9 @@ public class Service2Repository implements ServiceRepository{
         return Sample.builder().text("test").build();
     }
 
+    @Override
+    public Sample save(Sample sample) {
+        return Sample.builder().text("test").build();
+    }
+
 }

@@ -4,15 +4,15 @@ spring:
       client:
         provider:
           keycloak:
-            authorizationUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/auth
-            tokenUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/token
-            userInfoUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/userinfo
-            jwkSetUri: http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/certs
+            authorizationUri: http://13.231.124.138:7000/auth/realms/master/protocol/openid-connect/auth
+            tokenUri: http://13.231.124.138:7000/auth/realms/master/protocol/openid-connect/token
+            userInfoUri: http://13.231.124.138:7000/auth/realms/master/protocol/openid-connect/userinfo
+            jwkSetUri: http://13.231.124.138:7000/auth/realms/master/protocol/openid-connect/certs
             userNameAttribute: preferred_username
-            issuer-uri: http://54.65.98.221:7000/auth/realms/master
+            issuer-uri: http://13.231.124.138:7000/auth/realms/master
         registration:
           keycloak:
-            redirectUri: 'http://54.65.98.221:8090/login/oauth2/code/keycloak'
+            redirectUri: 'http://13.231.124.138:8090/login/oauth2/code/keycloak'
             clientId: webapp-dev
             clientSecret: NIf9gZyG6WTgwiOYUxgHNN8nab05KMBw
 service:
