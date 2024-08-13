@@ -8,8 +8,8 @@ spec:
     matchLabels:
       app: service-mesh-app-service1
   jwtRules:
-    - issuer: "http://54.65.98.221:7000/auth/realms/master"
-      jwksUri: "http://54.65.98.221:7000/auth/realms/master/protocol/openid-connect/certs"
+    - issuer: "http://keycloak-23/realms/master"
+      jwksUri: "http://keycloak-23/realms/master/protocol/openid-connect/certs"
       fromHeaders:
         - name: Authorization
           prefix: "Bearer "
@@ -29,4 +29,4 @@ spec:
     - when:
         - key: request.auth.claims[iss]
           values:
-            - "http://54.65.98.221:7000/auth/realms/master"
+            - "http://keycloak-23/realms/master"
