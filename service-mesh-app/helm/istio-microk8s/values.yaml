@@ -45,6 +45,7 @@ istio-ingressgateway:
     app: istio-ingressgateway
     istio: ingressgateway
   service:
+    type: LoadBalancer
 # For AWS ALB
 #    annotations:
 #      service.beta.kubernetes.io/aws-load-balancer-name: sample-ingress
@@ -60,7 +61,7 @@ istio-egressgateway:
     app: istio-egressgateway
     istio: egressgateway
   service:
-    type: ClusterIP
+    type: LoadBalancer
 
 istio-routing-setup:
   enabled: false
