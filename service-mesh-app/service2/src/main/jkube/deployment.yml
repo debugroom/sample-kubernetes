@@ -7,6 +7,7 @@ spec:
       containers:
         - env: # 環境変数設定
             - name: SPRING_PROFILES_ACTIVE
-              value: "staging"
-              #value: "dev"
+              value: "dev"
+            - name: DB_URL
+              value: "postgres.default:5432"
           imagePullPolicy: Always

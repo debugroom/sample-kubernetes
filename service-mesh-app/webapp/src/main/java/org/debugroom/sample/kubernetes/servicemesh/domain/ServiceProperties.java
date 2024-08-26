@@ -20,14 +20,14 @@ public class ServiceProperties {
     @NoArgsConstructor
     @Data
     public static class Service1{
-        public String dns;
+        public String url;
     }
 
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     public static class Service2{
-        public String dns;
+        public String url;
     }
 
 }

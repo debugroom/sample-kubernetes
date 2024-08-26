@@ -1,5 +1,6 @@
 package org.debugroom.sample.kubernetes.servicemesh.app.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.debugroom.sample.kubernetes.servicemesh.domain.model.Sample;
 import org.debugroom.sample.kubernetes.servicemesh.domain.repository.Service1Repository;
 import org.debugroom.sample.kubernetes.servicemesh.domain.service.SampleChoreographyService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.debugroom.sample.kubernetes.servicemesh.domain.repository.ServiceRepository;
 
+@Slf4j
 @Controller
 public class SampleController {
 
@@ -44,6 +46,7 @@ public class SampleController {
                 auth2AuthorizedClientService.loadAuthorizedClient(
                         oAuth2AuthenticationToken.getAuthorizedClientRegistrationId(),
                         oAuth2AuthenticationToken.getName());
+        log.info(this.getClass().getName() + ": AccessToken : " + oAuth2AuthorizedClient.getAccessToken().getTokenValue());
         model.addAttribute("oidcUser", oidcUser);
         model.addAttribute(oAuth2AuthorizedClient);
         model.addAttribute("accessToken", oAuth2AuthorizedClient.getAccessToken());

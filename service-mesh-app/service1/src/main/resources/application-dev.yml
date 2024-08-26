@@ -7,7 +7,7 @@ spring:
       kafka:
         binder:
           brokers:
-            - sample-cluster-kafka-bootstrap
+            - sample-cluster-kafka-bootstrap.kafka
           auto-create-topics: false
       binders:
         output:

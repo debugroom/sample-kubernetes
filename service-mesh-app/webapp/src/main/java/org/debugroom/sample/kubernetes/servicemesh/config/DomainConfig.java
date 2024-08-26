@@ -47,7 +47,7 @@ public class DomainConfig {
 
         oauth2Client.setDefaultClientRegistrationId("keycloak");
         return WebClient.builder()
-                .baseUrl(serviceProperties.getService1().getDns())
+                .baseUrl(serviceProperties.getService1().getUrl())
                 .apply(oauth2Client.oauth2Configuration())
                 .build();
     }
@@ -59,7 +59,7 @@ public class DomainConfig {
 
         oauth2Client.setDefaultClientRegistrationId("keycloak");
         return WebClient.builder()
-                .baseUrl(serviceProperties.getService2().getDns())
+                .baseUrl(serviceProperties.getService2().getUrl())
                 .apply(oauth2Client.oauth2Configuration())
                 .build();
     }

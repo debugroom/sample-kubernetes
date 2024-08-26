@@ -21,6 +21,6 @@ spring:
             clientSecret: YEUWzr3g2eNvnFZwtoCTU3HlUt1EPFDZ
 service:
   service1:
-    dns: http://localhost:8081
+    url: http://localhost:8081
   service2:
-    dns: http://localhost:8082
+    url: http://localhost:8082
